@@ -16,6 +16,7 @@ const path       = require("path");
 const fsh                 = require("./fs/fs-helper");
 const processHandlebars   = require("./handlebar/processHandlebars");
 const strReplaceAll       = require("./util/strReplaceAll");
+const jsonParse           = require("./util/jsonParse");
 
 /**
  * Scans the template path, for applicable template files
@@ -91,12 +92,34 @@ class TemplateContext {
 	}
 
 	/**
-	 * Copy over with templates, various files
+	 * Get the template normalized input
+	 * consisting of both template default, and provided inputs
 	 */
-	scanAndApplyFileTemplates() {
-		scanAndApplyFileTemplates( this.input, this.output, this.templatePath );
+	getCombinedInput() {
+		// Initialize the input, with the default input.json
+		let ret = jsonParse.file( path.resolve( this.templatePath, "input.configami.json" ), {} );
+
+		// Joined with provided input overwrites
+		ret = Object.assign(ret, this.input);
+
+		// Process the input with the input function (if needed)
+		const inputJSPath = path.resolve( this.templatePath, "input.configami.js" );
+		if( fsh.isFile( inputJSPath ) ) {
+			const inputMod = require( inputJSPath );
+			ret = inputMod( ret, this );
+		}
+
+		// Final return
+		return ret;
 	}
 
+	/**
+	 * Apply the template into the output
+	 */
+	applyTemplate() {
+		let combinedInput = this.getCombinedInput();
+		scanAndApplyFileTemplates( combinedInput, this.output, this.templatePath );
+	}
 
 }
 

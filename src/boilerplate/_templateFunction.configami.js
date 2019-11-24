@@ -14,7 +14,7 @@ function _templateFunction( context ) {
 	// const { output, input, moduleRoot, fsHelper } = context;
 
 	// Copy over with templates, various files
-	context.scanAndApplyFileTemplates();
+	context.applyTemplate();
 	
 }
 module.exports = _templateFunction;

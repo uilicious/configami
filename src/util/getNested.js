@@ -39,17 +39,18 @@ function getNestedArr(obj, pathArr, initialize = false) {
  * Get and return a nested value in an obj,
  * 
  * @param {Object}  obj        to get value from
- * @param {String}  path       path with dot annotation to use
+ * @param {String}  pathStr    path with dot annotation to use
  * @param {Boolean} initialize if true, object is initialized and returned
  */
-function getNested(obj, path, initialize = false) {
+function getNested(obj, pathStr, initialize = false) {
 	// null / blank check
-	if( path == null || path.length <= 0 ) {
+	if( pathStr == null || pathStr.length <= 0 ) {
 		return null;
 	}
 
 	// split path, and fetch nested
-	return getNestedArr(obj, path.split("."), initialize);
+	pathStr = pathStr+"";
+	return getNestedArr(obj, pathStr.split("."), initialize);
 }
 
 // Module export
