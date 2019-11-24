@@ -18,6 +18,7 @@ const processHandlebars   = require("./handlebar/processHandlebars");
 const strReplaceAll       = require("./util/strReplaceAll");
 const jsonParse           = require("./util/jsonParse");
 const nestedObjAssign     = require("./util/nestedObjAssign");
+const ConfigamiContext    = require("./ConfigamiContext");
 
 /**
  * Scans the template path, for applicable template files
@@ -26,8 +27,9 @@ const nestedObjAssign     = require("./util/nestedObjAssign");
  * @param {Object} input 
  * @param {Object} output 
  * @param {String} templatePath 
+ * @param {ConfigamiContext} cgCtx
  */
-function scanAndApplyFileTemplates( input, output, templatePath ) {
+function scanAndApplyFileTemplates( input, output, templatePath, cgCtx ) {
 	//
 	// Scan for files - pipe them to output
 	//
@@ -65,7 +67,34 @@ function scanAndApplyFileTemplates( input, output, templatePath ) {
 	//
 	// Scan for folders - to do recursion
 	//
+	const dirList = fsh.listSubDirectory( templatePath );
+	for( const dirName of dirList ) {
+		// normalize output
+		output[dirName] = output[dirName] || {};
 
+		// and recursively resolve it
+		scanAndApplyFileTemplates( input, output, path.resolve(templatePath, dirName), cgCtx);
+	}
+}
+
+/**
+ * Apply the template function module, if provided
+ * 
+ * @param {Object} input 
+ * @param {Object} output 
+ * @param {String} templatePath 
+ * @param {ConfigamiContext} cgCtx
+ */
+function applyTemplateFunction( input, output, templatePath, cgCtx ) {
+	// Check if template function exists - skip if not exists
+	const templateFuncPath = path.resolve( templatePath, "template.configami.js" );
+	if( !fsh.isFile( templateFuncPath ) ) {
+		return;
+	}
+
+	// Load the template function
+	const templateFunc = require( templateFuncPath );
+	templateFunc( cgCtx, input, output );
 }
 
 //---------------------------------
@@ -78,10 +107,16 @@ class TemplateContext {
 	/**
 	 * Initialize the module root 
 	 * 
-	 * @param {Object} inputObj 
-	 * @param {Object} outputObj 
+	 * @param {PlanRoot}      planRoot
+	 * @param {TemplateRoot}  templateRoot
+	 * @param {Object}        inputObj 
+	 * @param {Object}        outputObj 
 	 */
-	constructor( inputObj, outputObj ) {
+	constructor( planRoot, templateRoot, inputObj, outputObj ) {
+
+		this.planRoot = planRoot;
+		this.templateRoot = templateRoot;
+
 		this.input  = inputObj;
 		this.output = outputObj;
 
@@ -107,19 +142,45 @@ class TemplateContext {
 		const inputJSPath = path.resolve( this.templatePath, "input.configami.js" );
 		if( fsh.isFile( inputJSPath ) ) {
 			const inputMod = require( inputJSPath );
-			ret = inputMod( ret, this );
+			ret = inputMod( this.getConfigamiContext(ret), ret );
 		}
 
 		// Final return
 		return ret;
 	}
 
+	getConfigamiContext( inputObj = null) {
+		if( this._cgCtx != null ) {
+			return this._cgCtx;
+		}
+
+		let ret           = new ConfigamiContext();
+		ret.output        = this.output;
+		ret.templatePath  = this.templatePath;
+		ret.cgType        = "template";
+
+		// Special input handling
+		if( inputObj == null ) {
+			ret.input = this.getCombinedInput();
+		} else {
+			ret.input = inputObj;
+		}
+
+		ret.planRoot      = this.planRoot;
+		ret.templateRoot  = this.templateRoot;
+
+		return this._cgCtx = ret;
+	}
+
 	/**
 	 * Apply the template into the output
 	 */
 	applyTemplate() {
-		let combinedInput = this.getCombinedInput();
-		scanAndApplyFileTemplates( combinedInput, this.output, this.templatePath );
+		const configamiCtx  = this.getConfigamiContext();
+		const combinedInput = configamiCtx.input;
+
+		scanAndApplyFileTemplates( combinedInput, this.output, this.templatePath, configamiCtx );
+		applyTemplateFunction( combinedInput, this.output, this.templatePath, configamiCtx );
 	}
 
 }

@@ -94,7 +94,7 @@ function applyPlanObject( templateRootObj, planObj, planDir, outputObj ) {
 	// Given the plan, get the template, and apply it
 	const inputObj = planObj.input || {};
 	const template = templateRootObj.getTemplate( templatePath );
-	template( new TemplateContext(inputObj, outputObj) );
+	template( new TemplateContext(this, templateRootObj, inputObj, outputObj) );
 }
 
 /**
