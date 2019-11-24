@@ -2,6 +2,9 @@
  * Varient of object assign, in which nested objects are resolved recursively
  */
 function nestedObjAssign( out, src ) {
+	// console.log( out );
+	// console.log( src );
+
 	// Iterate each property
 	for( let key in src ) {
 		// Get value

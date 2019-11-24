@@ -166,8 +166,8 @@ class TemplateContext {
 			ret.input = inputObj;
 		}
 
-		ret.planRoot      = this.planRoot;
-		ret.templateRoot  = this.templateRoot;
+		ret._planRoot      = this.planRoot;
+		ret._templateRoot  = this.templateRoot;
 
 		return this._cgCtx = ret;
 	}

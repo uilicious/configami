@@ -65,6 +65,7 @@ class TemplateRoot {
 			return templateFunctionModule( context );
 		};
 	}
+
 }
 
 //---------------------------------
