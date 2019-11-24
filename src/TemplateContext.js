@@ -142,7 +142,7 @@ class TemplateContext {
 		const inputJSPath = path.resolve( this.templatePath, "input.configami.js" );
 		if( fsh.isFile( inputJSPath ) ) {
 			const inputMod = require( inputJSPath );
-			ret = inputMod( this.getConfigamiContext(ret), ret );
+			ret = inputMod( this.getConfigamiContext(ret), ret ) || ret;
 		}
 
 		// Final return
