@@ -17,6 +17,7 @@ const fsh                 = require("./fs/fs-helper");
 const processHandlebars   = require("./handlebar/processHandlebars");
 const strReplaceAll       = require("./util/strReplaceAll");
 const jsonParse           = require("./util/jsonParse");
+const nestedObjAssign     = require("./util/nestedObjAssign");
 
 /**
  * Scans the template path, for applicable template files
@@ -46,7 +47,7 @@ function scanAndApplyFileTemplates( input, output, templatePath ) {
 		if( fileName.indexOf(".notemplate") < 0 ) {
 			// Setup a new input object, with additional fields
 			// used to managed "cg.x" functions in futrue
-			const inputContext = Object.assign({
+			const inputContext = nestedObjAssign({
 				input: input // self refrence (if needed)
 			}, input);
 
@@ -100,7 +101,7 @@ class TemplateContext {
 		let ret = jsonParse.file( path.resolve( this.templatePath, "input.configami.json" ), {} );
 
 		// Joined with provided input overwrites
-		ret = Object.assign(ret, this.input);
+		ret = nestedObjAssign(ret, this.input);
 
 		// Process the input with the input function (if needed)
 		const inputJSPath = path.resolve( this.templatePath, "input.configami.js" );

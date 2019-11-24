@@ -18,8 +18,10 @@ const TemplateRoot  = require("./TemplateRoot");
 //
 //---------------------------------
 
-const fsh       = require("./fs/fs-helper")
+const fsh       = require("./fs/fs-helper");
 const jsonParse = require("./util/jsonParse");
+
+const nestedObjAssign = require("./util/nestedObjAssign");
 
 //---------------------------------
 //
@@ -55,11 +57,11 @@ class ConfigamiRunner {
 		// Get the working configuration
 		let workingDirConfig = jsonParse.file( configPathJSON, {});
 		if( fsh.isFile( configPathJS ) ) {
-			workingDirConfig = Object.assign(workingDirConfig, require(configPathJS))
+			workingDirConfig = nestedObjAssign(workingDirConfig, require(configPathJS))
 		}
 		
 		// Build the config object
-		let configObj = Object.assign({}, require("./ConfigamiRunnerDefaults.js"), workingDirConfig);
+		let configObj = nestedObjAssign({}, require("./ConfigamiRunnerDefaults.js"), workingDirConfig);
 
 		// Cache it, and return it
 		this._projectConfig = configObj;
