@@ -5,6 +5,11 @@ function nestedObjAssign( out, src ) {
 	// console.log( out );
 	// console.log( src );
 
+	// Skip if src is blank
+	if( src == null ) {
+		return out;
+	}
+
 	// Iterate each property
 	for( let key in src ) {
 		// Get value
