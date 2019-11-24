@@ -1,0 +1,14 @@
+#
+# exclude common hidden file types
+#
+.*
+
+#
+# node_modules
+#
+node_modules
+
+#
+# Register git stuff
+#
+!.git*
