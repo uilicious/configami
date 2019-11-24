@@ -13,6 +13,7 @@ const functionList = [
 	"listSubDirectory",
 	"copyFile",
 	"isFile",
+	"isDirectory",
 	"writeFile"
 ];
 
