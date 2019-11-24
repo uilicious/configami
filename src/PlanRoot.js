@@ -20,6 +20,7 @@ const copyFile           = require("./fs/copyFile");
 const isFile             = require("./fs/isFile");
 const writeFile          = require("./fs/writeFile");
 const jsonParse          = require("./util/jsonParse");
+const nestedObjAssign    = require("./util/nestedObjAssign");
 const TemplateContext    = require("./TemplateContext");
 
 //---------------------------------
@@ -91,8 +92,11 @@ function applyPlanObject( templateRootObj, planObj, planDir, outputObj ) {
 		return;
 	}
 
+	// Get the plan input
+	let inputObj = nestedObjAssign({}, jsonParse.file( path.resolve(planDir, "input.configami.json")));
+	inputObj = nestedObjAssign(inputObj, planObj.input);
+
 	// Given the plan, get the template, and apply it
-	const inputObj = planObj.input || {};
 	const template = templateRootObj.getTemplate( templatePath );
 	template( new TemplateContext(this, templateRootObj, inputObj, outputObj) );
 }

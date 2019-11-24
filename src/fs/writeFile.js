@@ -13,6 +13,7 @@ function writeFile( inPath, fileContent ) {
 	//         skip the copy step
 
 	// Copy file in entirety
+	fse.ensureFileSync( inPath );
 	fse.writeFileSync( inPath, fileContent );
 }
 
