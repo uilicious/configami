@@ -17,14 +17,14 @@ function jsonParse( json ) {
 /**
  * File varient of json parse
  */
-function jsonParseFile( path ) {
+function jsonParseFile( path, fallback = null ) {
 	// Valid object
 	if( isFile(path) ) {
 		let fileStr = fse.readFileSync( path, { encoding:"utf8" } );
 		return jsonParse( fileStr );
 	}
 	// No file
-	return null;
+	return fallback;
 }
 jsonParse.file = jsonParseFile;
 

@@ -6,7 +6,6 @@
 
 // Native node dependencies
 const path       = require("path")
-const fse        = require("fs-extra")
 
 // Project depdencies
 const PlanRoot      = require("./PlanRoot");
@@ -19,7 +18,8 @@ const TemplateRoot  = require("./TemplateRoot");
 //
 //---------------------------------
 
-//
+const fsh       = require("./fs/fs-helper")
+const jsonParse = require("./util/jsonParse");
 
 //---------------------------------
 //
@@ -48,9 +48,17 @@ class ConfigamiRunner {
 			return this._projectConfig;
 		}
 
-		// Get the config object
-		// @TO-CONSIDER : Making this configami.js file optional?
-		let workingDirConfig = require( path.resolve( this._workingdir, "configami.js" ) ) || {};
+		// Config file paths to try
+		const configPathJSON = path.resolve( this._workingdir, "configami.json" );
+		const configPathJS   = path.resolve( this._workingdir, "configami.js" );
+
+		// Get the working configuration
+		let workingDirConfig = jsonParse.file( configPathJSON, {});
+		if( fsh.isFile( configPathJS ) ) {
+			workingDirConfig = Object.assign(workingDirConfig, require(configPathJS))
+		}
+		
+		// Build the config object
 		let configObj = Object.assign({}, require("./ConfigamiRunnerDefaults.js"), workingDirConfig);
 
 		// Cache it, and return it
@@ -112,7 +120,7 @@ class ConfigamiRunner {
 	 * Reset and clear the cache folder - if it exists, and reinitialize it
 	 */
 	resetProjectRootCache() {
-		fse.emptyDirSync( this.cachePath() )
+		fsh.emptyDirSync( this.cachePath() )
 	}
 
 	/**
@@ -134,9 +142,9 @@ class ConfigamiRunner {
 			let projFolder = this.projectPath(subpath);
 
 			// Reset the cache and sync the files (if any)
-			fse.emptyDirSync( cacheFolder )
-			if( fse.existsSync( projFolder ) ) {
-				fse.copySync( projFolder, cacheFolder );
+			fsh.emptyDirSync( cacheFolder )
+			if( fsh.isDirectory( projFolder ) ) {
+				fsh.copySync( projFolder, cacheFolder );
 			}
 		}
 	}
