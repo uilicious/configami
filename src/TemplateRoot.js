@@ -14,7 +14,8 @@ const fse        = require("fs-extra");
 //
 //---------------------------------
 
-const isFile    = require("./fs/isFile");
+const isFile      = require("./fs/isFile");
+const isDirectory = require("./fs/isDirectory");
 
 //---------------------------------
 //
@@ -48,9 +49,9 @@ class TemplateRoot {
 		const templatePath = path.resolve( this._templateDir, subpath );
 
 		// // Check for "module.configami.js"
-		// if( !isFile( path.resolve(templatePath, "module.configami.js") ) ) {
-		// 	throw `[FATAL ERROR] Unable to process module '${subpath}' - missing 'module.configami.js' file`
-		// }
+		if( !isDirectory( templatePath ) ) {
+			throw `[FATAL ERROR] Unable to process module '${subpath}' - not a valid directory`
+		}
 
 		// Prepare the internal _templateFunction file
 		const templateFunctionPath = path.resolve( templatePath, "_templateFunction.configami.js" );

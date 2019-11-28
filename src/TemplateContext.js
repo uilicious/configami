@@ -263,7 +263,7 @@ class TemplateContext {
 		}
 
 		// Final return
-		return ret;
+		return JSON.parse( JSON.stringify(ret) );
 	}
 
 	getConfigamiContext( inputObj = null) {
