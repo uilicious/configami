@@ -75,6 +75,12 @@ handlebars.registerHelper('json2yaml', function() {
 	return finalYamlStrArr.join("\n");
 });
 
+//
+// Custom double quote escaping
+//
+handlebars.registerHelper('slashEscapeDoubleQuotes', function(ctx) {
+	return ctx.fn(this).replace(/\"/g, '\\"')
+});
 
 //--------------------------------------
 //
