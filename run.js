@@ -19,14 +19,8 @@ const ConfigamiRunner = require("./src/ConfigamiRunner");
  * @param {path} projectWorkspace where all other compoments would be loaded from
  */
 function cliBootstrap(projectWorkspace) {
-	console.log("--------------------------------------------------------------------")
-	console.log("|")
-	console.log("|   Assuming the following configami project:")
-	console.log("|   "+projectWorkspace);
-	console.log("|")
-	console.log("--------------------------------------------------------------------")
-
 	const runner = new ConfigamiRunner( projectWorkspace );
+	runner.logConfig();
 	runner.run();
 }
 

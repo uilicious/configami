@@ -184,7 +184,7 @@ function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output )
 		}
 
 		// and recursively resolve it
-		applyTemplate_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName] );
+		applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName] );
 	}
 
 	//

@@ -1,9 +1,13 @@
 /**
  * Varient of object assign, in which nested objects are resolved recursively
  */
-function nestedObjAssign( out, src ) {
-	// console.log( out );
-	// console.log( src );
+function nestedObjAssign( out, src, nxtSrc ) {
+	// Recurssion detection
+	if( nxtSrc != null ) {
+		let args = Array.from(arguments);
+		out = nestedObjAssign( out, src );
+		return nestedObjAssign.apply( this, [out].concat( args.slice(2) ) );
+	}
 
 	// Skip if src is blank
 	if( src == null ) {
@@ -43,7 +47,5 @@ function nestedObjAssign( out, src ) {
 
 	// Return back output
 	return out;
-
-	// return Object.assign(out, src)
 }
 module.exports = nestedObjAssign;
