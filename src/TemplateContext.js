@@ -16,7 +16,7 @@ const path       = require("path");
 const fsh                 = require("./fs/fs-helper");
 const handlebarsParse   = require("./handlebars/handlebarsParse");
 const strReplaceAll       = require("./util/strReplaceAll");
-const jsonParse           = require("./util/jsonParse");
+const jsonParse           = require("./conv/jsonParse");
 const nestedObjAssign     = require("./util/nestedObjAssign");
 const ConfigamiContext    = require("./ConfigamiContext");
 
