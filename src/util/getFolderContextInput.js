@@ -2,21 +2,22 @@
 // Constant dependencies
 //
 const path            = require("path");
-const hjsonParse      = requrie("./../conv/hjsonParse")
-const handlebarsParse = require("../handlebars/handlebarsParse")
-const jsonObjectClone = requrie("./../conv/jsonObjectClone")
+const fsh             = require("./../fs/fs-helper");
+const hjsonParse      = require("./../conv/hjsonParse")
+const handlebarsParse = require("./../handlebars/handlebarsParse")
+const jsonObjectClone = require("./../conv/jsonObjectClone")
 const nestedObjAssign = require("./../struct/nestedObjAssign")
 
 /**
  * Scans the given folder path for input settings, and return it combined with the baseInput
  * 
  * @param {String}   folderPath to scan for various input settings
- * @param {Object}   baseInput to combined with (note this is not modified)
- * @param {Function} cgCtxFunc to setup, and return configami context, given the current input
+ * @param {Object}   baseInput  to combined with (note this is not modified)
+ * @param {Function} cgCtxFunc  to setup, and return configami context, given the current input
  * 
  * @return {Object} final input object
  */
-module.exports = function getFolderContextInput( folderPath, baseInput, cgCtxFunc ) {
+function getFolderContextInput( folderPath, baseInput, cgCtxFunc ) {
 
 	// Prepare the base return object
 	let ret = jsonObjectClone( baseInput || {} );
@@ -48,3 +49,4 @@ module.exports = function getFolderContextInput( folderPath, baseInput, cgCtxFun
 	// Final return object
 	return ret;
 }
+module.exports = getFolderContextInput;

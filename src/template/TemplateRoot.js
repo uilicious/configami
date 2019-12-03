@@ -30,7 +30,7 @@ class TemplateRoot {
 		if( !isDirectory(inTemplateDir) ) {
 			throw "[FATAL ERROR] Setup of TemplateRoot is with an invalid directory "+inTemplateDir;
 		}
-		this._templateRootDir = inTemplateDir;
+		this.templateRootDir = inTemplateDir;
 	}
 
 	/**
@@ -45,9 +45,9 @@ class TemplateRoot {
 		let ret = new ConfigamiContext();
 
 		// Configure its various options
-		this.cgType          = "template";
-		this.templatePath    = templatePath;
-		this.templateRootDir = this._templateRootDir;
+		ret.cgType          = "template";
+		ret.templatePath    = templatePath;
+		ret.templateRootDir = this.templateRootDir;
 
 		// Return it
 		return ret;
@@ -59,7 +59,7 @@ class TemplateRoot {
 	 * @param {String} templatePath 
 	 */
 	getTemplateContext( templatePath ) {
-		return new TemplateContext( this.issueConfigamiContext_forTemplateContext() );
+		return new TemplateContext( this.issueConfigamiContext_forTemplateContext( templatePath ) );
 	}
 }
 

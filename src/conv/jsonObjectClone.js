@@ -12,3 +12,4 @@
 function jsonObjectClone(input) {
 	return JSON.parse( JSON.stringify(input) );
 }
+module.exports=jsonObjectClone;

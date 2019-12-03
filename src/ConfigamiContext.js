@@ -9,31 +9,39 @@ class ConfigamiContext {
 	constructor() {
 	}
 
-	// /**
-	//  * Given the output and src object, join its values recursively (object only)
-	//  * 
-	//  * @param {Object} output 
-	//  * @param {Object} src 
-	//  */
-	// joinNestedObject(output, src) {
-	// 	return nestedObjAssign(output, src);
-	// }
+	/**
+	 * Given the output and src object, join its values recursively (object only)
+	 * 
+	 * @param {Object} output 
+	 * @param {Object} src 
+	 */
+	joinNestedObject(output, src) {
+		return require("./struct/nestedObjAssign")(output, src);
+	}
 
-	// /**
-	//  * Given the template path, and its input, apply and return its output
-	//  * 
-	//  * @param {String} templatePath 
-	//  * @param {Object} input 
-	//  * @param {Object} output 
-	//  */
-	// applyTemplate( templatePath, input = {}, output = {}) {
-	// 	// Intentionally loaded here to avoid circular dependency
-	// 	const TemplateContext = require("./TemplateContext");
-	// 	// Get teh template
-	// 	const template = this._templateRoot.getTemplate( templatePath );
-	// 	template( new TemplateContext(this._planRoot, this._templateRoot, input, output) );
-	// 	return output;
-	// }
+	/**
+	 * Given the template path, and its input, apply and return its output
+	 * 
+	 * @param {String} templatePath 
+	 * @param {Object} input 
+	 * @param {Object} output 
+	 */
+	applyTemplate( templatePath, input = {}, output = {} ) {
+		// Intentionally loaded here to avoid circular dependency
+		const TemplateContext = require("./template/TemplateContext");
+
+		// Initialize the ConfigamiContext
+		let newCtx = new ConfigamiContext();
+
+		// Configure its various options
+		newCtx.cgType          = "template";
+		newCtx.templatePath    = templatePath;
+		newCtx.templateRootDir = this.templateRootDir;
+
+		// Get the template
+		let tCtx = new TemplateContext( newCtx );
+		return tCtx.applyTemplate(input, output);
+	}
 }
 
 // Module export

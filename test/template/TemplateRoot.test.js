@@ -51,4 +51,21 @@ describe("template/TemplateContext (using TemplateRoot)", () => {
 			assert.ok( root );
 		});
 	});
+
+	// Hello world testing
+	describe("`hello` template (hello/world.txt)", () => {
+
+		// basic getTemplateContext
+		let tCtx = root.getTemplateContext("hello");
+		it("valid `getTemplateContext`", () => {
+			assert.ok( tCtx );
+		});
+		
+		it("simple template output", () => {
+			let output = tCtx.applyTemplate();
+			assert.ok( output );
+			assert.equal( output["world.txt"], "its ok!" );
+		});
+		
+	});
 });
