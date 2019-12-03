@@ -166,7 +166,7 @@ function getTemplateJSON( filePath, input ) {
 	}
 	
 	// Convert it to string
-	const templateJSON = jsonParse(templateJSONStr);
+	const templateJSON = jsonParse(templateJSONStr, filePath);
 	if( templateJSON == null ) {
 		return null;
 	}
@@ -207,7 +207,8 @@ function applyTemplateJSON_noRecursion( input, output, templatePath, cgCtx ) {
 	}
 
 	//
-	// Scan for files - and pipe out and ".configami-template.x"
+	// Scan for files - and pipe out the "x.configami-template.z"
+	// into "x.z" files
 	//
 	const fileList = fsh.listFileDirectory( templatePath );
 	for( const fileName of fileList ) {
