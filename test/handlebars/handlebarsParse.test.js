@@ -72,5 +72,25 @@ describe("handlebarsParse", () => {
 		});
 	});
 
-	
+	describe("slashEscapeDoubleQuotes", () => {
+		it("simple quote testing", () => {
+
+			// Input object to use
+			let input = {};
+
+			// The template to use
+			let template = `hello: {{#slashEscapeDoubleQuotes}}"world"{{/slashEscapeDoubleQuotes}}`;
+
+			// The expected output
+			let expectedOutput = `hello: \\"world\\"`;
+
+			// Parse and test
+			assert.equal(
+				handlebarsParse(template, input),
+				expectedOutput
+			);
+		});
+	});
+
+
 });
