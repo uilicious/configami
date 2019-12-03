@@ -54,18 +54,41 @@ describe("template/TemplateContext (using TemplateRoot)", () => {
 
 	// Hello world testing
 	describe("`hello` template (hello/world.txt)", () => {
-
-		// basic getTemplateContext
 		let tCtx = root.getTemplateContext("hello");
 		it("valid `getTemplateContext`", () => {
 			assert.ok( tCtx );
 		});
-		
-		it("simple template output", () => {
+		it("validate template output", () => {
 			let output = tCtx.applyTemplate();
 			assert.ok( output );
 			assert.equal( output["world.txt"], "its ok!" );
 		});
-		
+	});
+
+	// nested-hello testing
+	describe("`nested-hello` template", () => {
+		let tCtx = root.getTemplateContext("nested-hello");
+		it("valid `getTemplateContext`", () => {
+			assert.ok( tCtx );
+		});
+		it("validate template output", () => {
+			let output = tCtx.applyTemplate();
+			assert.ok( output );
+			assert.ok( output.world );
+			assert.equal( output.world["is-ok.txt"], "yes" );
+		});
+	});
+
+	// nested-hello testing
+	describe("`nested-hello/world` template", () => {
+		let tCtx = root.getTemplateContext("nested-hello/world");
+		it("valid `getTemplateContext`", () => {
+			assert.ok( tCtx );
+		});
+		it("validate template output", () => {
+			let output = tCtx.applyTemplate();
+			assert.ok( output );
+			assert.equal( output["is-ok.txt"], "yes" );
+		});
 	});
 });

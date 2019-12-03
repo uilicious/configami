@@ -4,8 +4,8 @@
 //
 //---------------------------------
 
-const path             = require("path");
-const fsh              = require("./../fs/fs-helper");
+const path = require("path");
+const fsh  = require("./../fs/fs-helper");
 
 const ConfigamiContext      = require("./../ConfigamiContext");
 const getFolderContextInput = require("./../util/getFolderContextInput");
@@ -275,11 +275,11 @@ function applyTemplate_noRecursive( fullTemplatePath, cgCtx, inputObj, output ) 
 		let outputRemap = tObj.outputRemap || outputRemapFallback;
 		if( outputRemap ) {
 			// Generate the output
-			let templateOutput = cgCtx.applyTemplate( tObj.template, tObj.input, {} );
+			let templateOutput = cgCtx.applyTemplate( tObj.template, tObj.input || inputObj, {} );
 			processOutputRemap( output, templateOutput, outputRemap );
 		} else {
 			// Apply the template directly
-			cgCtx.applyTemplate( tObj.template, tObj.input, output );
+			cgCtx.applyTemplate( tObj.template, tObj.input || inputObj, output );
 		}
 	}
 
