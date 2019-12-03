@@ -171,7 +171,7 @@ function applyTemplate_recursive( fullTemplatePath, cgCtx, baseInput, output ) {
 	//
 	// Apply the template (without recursion)
 	//
-	applyTemplate_noRecursive( fullTemplatePath, cgCtx, inputObj, output );
+	applyTemplate_noRecursive( fullTemplatePath, cgCtx, jsonObjectClone(inputObj), output );
 
 	//
 	// Scan for folders - to do recursion
