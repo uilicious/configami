@@ -14,11 +14,11 @@ const fse  = require("fs-extra");
 //
 //---------------------------------
 
-const listFileDirectory  = require("./fs/listFileDirectory");
-const listSubDirectory   = require("./fs/listSubDirectory");
-const copyFile           = require("./fs/copyFile");
-const isFile             = require("./fs/isFile");
-const writeFile          = require("./fs/writeFile");
+const listFileDirectory  = require("../fs/listFileDirectory");
+const listSubDirectory   = require("../fs/listSubDirectory");
+const copyFile           = require("../fs/copyFile");
+const isFile             = require("../fs/isFile");
+const writeFile          = require("../fs/writeFile");
 const jsonParse          = require("./util/jsonParse");
 const nestedObjAssign    = require("./util/nestedObjAssign");
 const TemplateContext    = require("./TemplateContext");

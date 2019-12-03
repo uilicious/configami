@@ -14,8 +14,8 @@ const fse        = require("fs-extra");
 //
 //---------------------------------
 
-const isFile      = require("./fs/isFile");
-const isDirectory = require("./fs/isDirectory");
+const isFile      = require("../fs/isFile");
+const isDirectory = require("../fs/isDirectory");
 
 //---------------------------------
 //

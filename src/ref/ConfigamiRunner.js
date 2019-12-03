@@ -18,7 +18,7 @@ const TemplateRoot  = require("./TemplateRoot");
 //
 //---------------------------------
 
-const fsh       = require("./fs/fs-helper");
+const fsh       = require("../fs/fs-helper");
 const jsonParse = require("./util/jsonParse");
 
 const nestedObjAssign = require("./util/nestedObjAssign");

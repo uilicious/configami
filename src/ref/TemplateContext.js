@@ -13,11 +13,11 @@ const path       = require("path");
 //
 //---------------------------------
 
-const fsh                 = require("./fs/fs-helper");
-const handlebarsParse   = require("./handlebars/handlebarsParse");
-const strReplaceAll       = require("./conv/strReplaceAll");
-const jsonParse           = require("./conv/hjsonParse");
-const nestedObjAssign     = require("./struct/nestedObjAssign");
+const fsh                 = require("../fs/fs-helper");
+const handlebarsParse   = require("../handlebars/handlebarsParse");
+const strReplaceAll       = require("../conv/strReplaceAll");
+const jsonParse           = require("../conv/hjsonParse");
+const nestedObjAssign     = require("../struct/nestedObjAssign");
 const ConfigamiContext    = require("./ConfigamiContext");
 
 /**

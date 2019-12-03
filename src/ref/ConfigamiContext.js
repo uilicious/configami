@@ -4,7 +4,7 @@
 //
 //---------------------------------
 
-const nestedObjAssign = require("./struct/nestedObjAssign");
+const nestedObjAssign = require("../struct/nestedObjAssign");
 
 //---------------------------------
 //
