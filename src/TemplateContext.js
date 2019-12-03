@@ -14,7 +14,7 @@ const path       = require("path");
 //---------------------------------
 
 const fsh                 = require("./fs/fs-helper");
-const processHandlebars   = require("./handlebar/processHandlebars");
+const handlebarsParse   = require("./handlebars/handlebarsParse");
 const strReplaceAll       = require("./util/strReplaceAll");
 const jsonParse           = require("./util/jsonParse");
 const nestedObjAssign     = require("./util/nestedObjAssign");
@@ -59,7 +59,7 @@ function scanAndApplyFileTemplates( input, output, templatePath, cgCtx ) {
 		// Skips this if block, if .notemplate is detected
 		if( fileName.indexOf(".notemplate") < 0 ) {
 			// Apply the template
-			fileVal = processHandlebars( fileVal, handlebarDataContext(input) );
+			fileVal = handlebarsParse( fileVal, handlebarDataContext(input) );
 		} else {
 			// Normalize the output without the ".notemplate" label
 			fileOutputName = strReplaceAll(fileName, ".notemplate", "");
@@ -160,7 +160,7 @@ function getTemplateJSON( filePath, input ) {
 	}
 
 	// Apply the template - skip if empty
-	let templateJSONStr = processHandlebars( templateJSONRaw, handlebarDataContext(input) );
+	let templateJSONStr = handlebarsParse( templateJSONRaw, handlebarDataContext(input) );
 	if(templateJSONStr == null || templateJSONStr.trim().length <= 0) {
 		return null;
 	}

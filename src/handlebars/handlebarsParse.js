@@ -96,9 +96,9 @@ handlebars.registerHelper('slashEscapeDoubleQuotes', function(ctx) {
  * 
  * @return formatted string
  */
-function processHandlebars(template, data) {
+function handlebarsParse(template, data) {
 	// @TODO - in memory cache the templates ?
 	let compiled = handlebars.compile(template);
 	return compiled(data);
 }
-module.exports = processHandlebars;
+module.exports = handlebarsParse;
