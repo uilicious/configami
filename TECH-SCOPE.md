@@ -1,4 +1,6 @@
-# This is not meant for realt-time server systems
+# This is not meant for real-time server systems
+
+> This is meant for a single process use CLI
 
 As such acceptable compromises of "performance" for better code readability is done, such as (but not limited to)
 
