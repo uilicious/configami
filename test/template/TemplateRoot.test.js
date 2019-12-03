@@ -111,7 +111,7 @@ describe("template/TemplateContext (using TemplateRoot)", () => {
 	});
 
 	// template-file testing
-	describe("`test/input-output` template", () => {
+	describe("`test/template-file` template", () => {
 		let tCtx = root.getTemplateContext("test/template-file");
 		it("valid `getTemplateContext`", () => {
 			assert.ok( tCtx );
@@ -121,10 +121,5 @@ describe("template/TemplateContext (using TemplateRoot)", () => {
 			assert.ok( output );
 			assert.equal( output["output.txt"], "- 1\n- 2\n- 3" );
 		});
-		// it("validate input overwrite output", () => {
-		// 	let output = tCtx.applyTemplate( { a:5, b:4, d:"k" });
-		// 	assert.ok( output );
-		// 	assert.equal( output["output.txt"], "544k" );
-		// });
 	});
 });
