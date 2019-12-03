@@ -34,9 +34,10 @@ class ConfigamiContext {
 		let newCtx = new ConfigamiContext();
 
 		// Configure its various options
-		newCtx.cgType          = "template";
-		newCtx.templatePath    = templatePath;
-		newCtx.templateRootDir = this.templateRootDir;
+		newCtx.cgType           = "template";
+		newCtx.templatePath     = templatePath;
+		newCtx.templateRootDir  = this.templateRootDir;
+		newCtx.workspaceRootDir = this.workspaceRootDir;
 
 		// Get the template
 		let tCtx = new TemplateContext( newCtx );

@@ -10,6 +10,12 @@ function nestedObjAssign( out, src ) {
 		return out;
 	}
 
+	// Skip if src and output is identical objects 
+	// (nothing to copy over)
+	if( src === out ) {
+		return out;
+	}
+
 	// Iterate each property
 	for( let key in src ) {
 		// Get value

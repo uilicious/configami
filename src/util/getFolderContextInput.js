@@ -11,13 +11,14 @@ const nestedObjAssign = require("./../struct/nestedObjAssign")
 /**
  * Scans the given folder path for input settings, and return it combined with the baseInput
  * 
- * @param {String}   folderPath to scan for various input settings
- * @param {Object}   baseInput  to combined with (note this is not modified)
- * @param {Function} cgCtxFunc  to setup, and return configami context, given the current input
+ * @param {String}   folderPath  to scan for various input settings
+ * @param {Object}   baseInput   to combined with (note this is not modified)
+ * @param {Function} cgCtxFunc   to setup, and return configami context, given the current input
+ * @param {Boolean}  isWorkspace should be configured true, for workspace plans
  * 
  * @return {Object} final input object
  */
-function getFolderContextInput( folderPath, baseInput, cgCtxFunc ) {
+function getFolderContextInput( folderPath, baseInput, cgCtxFunc, isWorkspace = false ) {
 
 	// Prepare the base return object
 	let ret = jsonObjectClone( baseInput || {} );
@@ -32,7 +33,10 @@ function getFolderContextInput( folderPath, baseInput, cgCtxFunc ) {
 	}
 
 	// Overwrite with base input
-	ret = nestedObjAssign(ret, baseInput);
+	// NOTE: this behaviour is skipped, for "workspace plans"
+	if( isWorkspace == false ) {
+		ret = nestedObjAssign(ret, baseInput);
+	}
 
 	// Lets parse the handlebars js file
 	const jsFilePath = path.join( folderPath, "input.configami.js" );

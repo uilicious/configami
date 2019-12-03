@@ -24,13 +24,16 @@ class TemplateRoot {
 
 	/**
 	 * Initialize the module root 
+	 * 
 	 * @param {String} inTemplateDir 
+	 * @param {String} inWorkspaceDir [optional] workspace dir pathing 
 	 */
-	constructor( inTemplateDir ) {
+	constructor( inTemplateDir, inWorkspaceDir = null ) {
 		if( !isDirectory(inTemplateDir) ) {
 			throw "[FATAL ERROR] Setup of TemplateRoot is with an invalid directory "+inTemplateDir;
 		}
-		this.templateRootDir = inTemplateDir;
+		this.templateRootDir  = inTemplateDir;
+		this.workspaceRootDir = inWorkspaceDir;
 	}
 
 	/**
@@ -45,9 +48,10 @@ class TemplateRoot {
 		let ret = new ConfigamiContext();
 
 		// Configure its various options
-		ret.cgType          = "template";
-		ret.templatePath    = templatePath;
-		ret.templateRootDir = this.templateRootDir;
+		ret.cgType           = "template";
+		ret.templatePath     = templatePath;
+		ret.templateRootDir  = this.templateRootDir;
+		ret.workspaceRootDir = this.workspaceRootDir;
 
 		// Return it
 		return ret;
