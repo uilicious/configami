@@ -21,7 +21,7 @@ const assert = require("chai").assert
 //
 // TemplateRoot basic functionality checks
 //
-describe("template/TemplateRoot", () => {
+describe("template/TemplateRoot - basic constructor test", () => {
 	describe("basic setup", () => {
 		it("basic class setup", () => {
 			// Setup and assert not null

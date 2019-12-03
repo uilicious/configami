@@ -11,6 +11,7 @@ const TemplateRoot          = require("./../template/TemplateRoot");
 const ConfigamiContext      = require("./../ConfigamiContext");
 const getFolderContextInput = require("./../util/getFolderContextInput");
 const jsonObjectClone       = require("./../conv/jsonObjectClone");
+const handlebarsParse       = require("./../handlebars/handlebarsParse");
 const processOutputRemap    = require("./../util/processOutputRemap");
 
 //---------------------------------
@@ -31,7 +32,7 @@ class WorkspaceRoot {
 	 * @param {String} inTemplateDir 
 	 */
 	constructor( inWorkspaceDir, inTemplateDir ) {
-		if( !isDirectory(inWorkspaceDir) ) {
+		if( !fsh.isDirectory(inWorkspaceDir) ) {
 			throw "[FATAL ERROR] Setup of WorkspaceRoot is with an invalid directory "+inWorkspaceDir;
 		}
 		this.workspaceRootDir = inWorkspaceDir;
@@ -61,10 +62,33 @@ class WorkspaceRoot {
 	}
 	
 	/**
-	 * Scan the workspace, and apply the respective plans and get the output file
+	 * Given a workspacePath, get the full absolute path equivalent
+	 * 
+	 * @param {String} workspacePath 
+	 * 
+	 * @return {String} full absolute workspace path
+	 */
+	getFullWorkspacePath( workspacePath ) {
+		if( workspacePath != null && workspacePath.length > 0 ) {
+			return path.join( this.workspaceRootDir, workspacePath );
+		}
+		return this.workspaceRootDir;
+	}
+
+	/**
+	 * Scan the workspace, and apply the respective plans and get the output object
+	 * 
+	 * @return {*} output object (for testing?)
 	 */
 	applyPlan_toOutputObj() {
-		return applyWorkspacePlan_recursive(  )
+		return applyWorkspacePlan_recursive(this, "", {}, {});
+	}
+
+	/**
+	 * Scan the workspace, and apply the respective plans and get the output file
+	 */
+	applyPlan() {
+		applyOutputObjectIntoWorkDir( this.applyPlan_toOutputObj(), this.workspaceRootDir );
 	}
 }
 
@@ -77,6 +101,37 @@ module.exports = WorkspaceRoot;
 
 //---------------------------------
 //
+//  Utility function
+//
+//---------------------------------
+
+/**
+ * Scan the output recursively, and writes it into the work dir
+ * 
+ * @param {Object} output  object to scan and output to wrkDir
+ * @param {String} wrkDir  path to output into
+ */
+function applyOutputObjectIntoWorkDir( output, wrkDir ) {
+	// Iterate for each key and value
+	for(const key of Object.keys(output)) {
+		const val = output[key];
+
+		// Write file content (if its a string)
+		if (typeof val === 'string' || val instanceof String) {
+			writeFile( path.resolve(wrkDir, key), val );
+			continue;
+		}
+
+		// Recusively resolve output
+		if( !output[key] ) {
+			output[key] = {};
+		}
+		applyOutputObjectIntoWorkDir( output[key], path.resolve( wrkDir, key ) );
+	}
+}
+
+//---------------------------------
+//
 //  Recursive plans setup
 //
 //---------------------------------
@@ -84,14 +139,20 @@ module.exports = WorkspaceRoot;
 /**
  * Apply workspace plans into the output object - recursively
  * 
- * @param {String} fullPath to scan for
- * @param {ConfigamiContext} cgCtx to use
+ * @param {WorkspaceRoot} wRoot workspace root to use
+ * @param {String} workspacePath to scan within wRoot
  * @param {Object} baseInput to initialize with
  * @param {Object} output to populate
  * 
  * @return {Object} for the formatted output
  */
-function applyWorkspacePlan_recursive( fullPath, cgCtx, baseInput, output ) {
+function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output ) {
+	//
+	// Get the fullPath and cgCtx first
+	//
+	const fullPath = wRoot.getFullWorkspacePath( workspacePath );
+	const cgCtx = wRoot.issueConfigamiContext_forWorkspacePlanContext( workspacePath );
+	
 	//
 	// Get the current folder context input
 	//
@@ -114,8 +175,16 @@ function applyWorkspacePlan_recursive( fullPath, cgCtx, baseInput, output ) {
 		// normalize output
 		output[dirName] = output[dirName] || {};
 
+		// Derive the new path
+		let nxtWorkspacePath = "";
+		if( workspacePath == "" ) {
+			nxtWorkspacePath = dirName;
+		} else {
+			nxtWorkspacePath = path.join(workspacePath, dirName);
+		}
+
 		// and recursively resolve it
-		applyTemplate_recursive( path.resolve(fullPath, dirName), cgCtx, inputObj, output[dirName] );
+		applyTemplate_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName] );
 	}
 
 	//
@@ -135,7 +204,7 @@ function applyWorkspacePlan_recursive( fullPath, cgCtx, baseInput, output ) {
  * @return {Object} for the formatted output
  */
 function applyWorkspacePlan_noRecursive( fullPath, cgCtx, inputObj, output ) {
-
+	
 	//
 	// Inner function - used to apply a single template JSON obj
 	//
