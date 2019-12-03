@@ -14,5 +14,8 @@
     "handlebars-helpers": "=0.10.0",
     "hjson": "=3.2.1",
     "json2yaml": "^1.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2"
   }
 }
