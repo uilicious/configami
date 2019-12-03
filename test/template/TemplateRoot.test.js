@@ -79,7 +79,7 @@ describe("template/TemplateContext (using TemplateRoot)", () => {
 		});
 	});
 
-	// nested-hello testing
+	// nested-hello/world testing
 	describe("`nested-hello/world` template", () => {
 		let tCtx = root.getTemplateContext("nested-hello/world");
 		it("valid `getTemplateContext`", () => {
@@ -90,5 +90,41 @@ describe("template/TemplateContext (using TemplateRoot)", () => {
 			assert.ok( output );
 			assert.equal( output["is-ok.txt"], "yes" );
 		});
+	});
+
+	// input-output testing
+	describe("`test/input-output` template", () => {
+		let tCtx = root.getTemplateContext("test/input-output");
+		it("valid `getTemplateContext`", () => {
+			assert.ok( tCtx );
+		});
+		it("validate template output", () => {
+			let output = tCtx.applyTemplate( { d:"k" });
+			assert.ok( output );
+			assert.equal( output["output.txt"], "404k" );
+		});
+		it("validate input overwrite output", () => {
+			let output = tCtx.applyTemplate( { a:5, b:4, d:"k" });
+			assert.ok( output );
+			assert.equal( output["output.txt"], "544k" );
+		});
+	});
+
+	// template-file testing
+	describe("`test/input-output` template", () => {
+		let tCtx = root.getTemplateContext("test/template-file");
+		it("valid `getTemplateContext`", () => {
+			assert.ok( tCtx );
+		});
+		it("validate template output", () => {
+			let output = tCtx.applyTemplate( { d:"k" });
+			assert.ok( output );
+			assert.equal( output["output.txt"], "- 1\n- 2\n- 3" );
+		});
+		// it("validate input overwrite output", () => {
+		// 	let output = tCtx.applyTemplate( { a:5, b:4, d:"k" });
+		// 	assert.ok( output );
+		// 	assert.equal( output["output.txt"], "544k" );
+		// });
 	});
 });

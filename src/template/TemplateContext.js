@@ -11,6 +11,7 @@ const ConfigamiContext      = require("./../ConfigamiContext");
 const getFolderContextInput = require("./../util/getFolderContextInput");
 const jsonObjectClone       = require("./../conv/jsonObjectClone");
 const handlebarsParse       = require("./../handlebars/handlebarsParse");
+const strReplaceAll         = require("./../conv/strReplaceAll");
 
 //---------------------------------
 //
@@ -295,7 +296,7 @@ function applyTemplate_noRecursive( fullTemplatePath, cgCtx, inputObj, output ) 
 		const templateFilePath = path.join( fullTemplatePath, fileName );
 
 		// The final output name (after relabeling)
-		const fileOutputName = templateFilePath(fileName, ".configami-template", "");
+		const fileOutputName = strReplaceAll(fileName, ".configami-template", "");
 
 		// The templateJSON object, skip if null
 		const templateJSON = handlebarsParse.hjsonFile( templateFilePath, inputObj, null );

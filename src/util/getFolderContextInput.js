@@ -31,6 +31,9 @@ function getFolderContextInput( folderPath, baseInput, cgCtxFunc ) {
 		ret = nestedObjAssign(ret, handlebarsParse.hjsonFile(filePath, ret));
 	}
 
+	// Overwrite with base input
+	ret = nestedObjAssign(ret, baseInput);
+
 	// Lets parse the handlebars js file
 	const jsFilePath = path.join( folderPath, "input.configami.js" );
 	if( fsh.isFile( jsFilePath ) ) {
