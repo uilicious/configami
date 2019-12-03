@@ -26,8 +26,13 @@
  *   - 2
  * ```
  */
+
+// Dependency loading
+const getNestedValue = require("../../struct/getNestedValue")
 const json2yaml = require("json2yaml");
-handlebars.registerHelper('json2yaml', function() {
+
+// The handlebar json2yaml helper
+module.exports = function() {
 	// Get the arguments
 	// note the last argument is the "handlebar context"
 	const rawArgs = Array.prototype.slice.call(arguments);
@@ -41,7 +46,7 @@ handlebars.registerHelper('json2yaml', function() {
 	let inputPath = args[0] || hbCtx.fn(this);
 
 	// Fetch the json object
-	let jsonObj = getNested( this, inputPath );
+	let jsonObj = getNestedValue( this, inputPath );
 	if( jsonObj == null ) {
 		throw "Unexpected blank json for json2yaml - path: "+inputPath;
 	}
@@ -79,4 +84,4 @@ handlebars.registerHelper('json2yaml', function() {
 
 	// Lets join it up - and return the value
 	return finalYamlStrArr.join("\n");
-});
+};

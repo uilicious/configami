@@ -25,7 +25,7 @@ describe("handlebarsParse", () => {
 	//
 	//-------------------------------------------------
 
-	describe("(sanity check) native features", () => {
+	describe("sanity check of native features", () => {
 		it("simple variable substitution", () => {
 			// lets parse a hello world
 			assert.equal( 
@@ -71,4 +71,6 @@ describe("handlebarsParse", () => {
 			);
 		});
 	});
+
+	
 });
