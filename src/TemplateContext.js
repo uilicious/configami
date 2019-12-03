@@ -14,7 +14,7 @@ const path       = require("path");
 //---------------------------------
 
 const fsh                 = require("./fs/fs-helper");
-const processHandlebars   = require("./util/processHandlebars");
+const processHandlebars   = require("./handlebar/processHandlebars");
 const strReplaceAll       = require("./util/strReplaceAll");
 const jsonParse           = require("./util/jsonParse");
 const nestedObjAssign     = require("./util/nestedObjAssign");
