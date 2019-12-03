@@ -45,8 +45,14 @@ module.exports = function() {
 	// Get the input path (to process)
 	let inputPath = args[0] || hbCtx.fn(this);
 
-	// Fetch the json object
-	let jsonObj = getNestedValue( this, inputPath );
+	// Fetch the json object (with `this` support)
+	let jsonObj = null; 
+	if( inputPath == "this" ) {
+		jsonObj = this;
+	} else {
+		jsonObj = getNestedValue( this, inputPath );
+	}
+	
 	if( jsonObj == null ) {
 		throw "Unexpected blank json for json2yaml - path: "+inputPath;
 	}

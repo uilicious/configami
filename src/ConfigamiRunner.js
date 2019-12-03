@@ -111,7 +111,7 @@ class ConfigamiRunner {
 		if( this._workspaceRoot ) {
 			return this._workspaceRoot;
 		}
-		return this._workspaceRoot = new WorkspaceRoot( this.projectPath("template"), this.projectPath("workspace") )
+		return this._workspaceRoot = new WorkspaceRoot( this.projectPath("workspace"), this.projectPath("template") )
 	}
 
 	/**

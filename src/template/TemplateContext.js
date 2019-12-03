@@ -13,6 +13,7 @@ const jsonObjectClone       = require("./../conv/jsonObjectClone");
 const handlebarsParse       = require("./../handlebars/handlebarsParse");
 const strReplaceAll         = require("./../conv/strReplaceAll");
 const processOutputRemap    = require("./../util/processOutputRemap");
+const nestedObjAssign       = require("./../struct/nestedObjAssign");
 
 //---------------------------------
 //
@@ -259,7 +260,7 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 		}
 
 		// Merge the output together, note that nothing happens if they are identical (which they should be)
-		output = nestedObjectAssign( output, templateFunc( cgCtx, inputObj, output ) );
+		output = nestedObjAssign( output, templateFunc( cgCtx, inputObj, output ) );
 	}
 
 	//

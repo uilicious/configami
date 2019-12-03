@@ -88,7 +88,8 @@ class WorkspaceRoot {
 	 * Scan the workspace, and apply the respective plans and get the output file
 	 */
 	applyPlan() {
-		applyOutputObjectIntoWorkDir( this.applyPlan_toOutputObj(), this.workspaceRootDir );
+		let outputObj = this.applyPlan_toOutputObj();
+		applyOutputObjectIntoWorkDir( outputObj, this.workspaceRootDir );
 	}
 }
 
@@ -118,7 +119,7 @@ function applyOutputObjectIntoWorkDir( output, wrkDir ) {
 
 		// Write file content (if its a string)
 		if (typeof val === 'string' || val instanceof String) {
-			writeFile( path.resolve(wrkDir, key), val );
+			fsh.writeFile( path.resolve(wrkDir, key), val );
 			continue;
 		}
 
@@ -153,6 +154,8 @@ function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output )
 	const fullPath = wRoot.getFullWorkspacePath( workspacePath );
 	const cgCtx = wRoot.issueConfigamiContext_forWorkspacePlanContext( workspacePath );
 	
+	// console.log("==", workspacePath, output);
+
 	//
 	// Get the current folder context input
 	//
