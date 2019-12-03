@@ -4,7 +4,7 @@ const fse     = require("fs-extra")
 const isFile  = require("../fs/isFile")
 
 /**
- * Takes in a json string, and parses it into an object
+ * Takes in a hjson string, and parses it into an object
  * 
  * @param {String} json 
  * @param {String} filePath optional filepath used for debugging
