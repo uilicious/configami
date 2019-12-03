@@ -12,6 +12,7 @@ const getFolderContextInput = require("./../util/getFolderContextInput");
 const jsonObjectClone       = require("./../conv/jsonObjectClone");
 const handlebarsParse       = require("./../handlebars/handlebarsParse");
 const strReplaceAll         = require("./../conv/strReplaceAll");
+const processOutputRemap    = require("./../util/processOutputRemap");
 
 //---------------------------------
 //
@@ -43,8 +44,8 @@ class TemplateContext {
 
 		// Get the full template path (used internally)
 		// and validate if its a directory
-		this._fullTemplatePath = path.join( this._cgCtx.templateRootDir, this._cgCtx.templatePath );
-		if( !fsh.isDirectory(this._fullTemplatePath) ) {
+		this._fullPath = path.join( this._cgCtx.templateRootDir, this._cgCtx.templatePath );
+		if( !fsh.isDirectory(this._fullPath) ) {
 			throw "[FATAL ERROR] - TemplatePath is not a valid directory : "+this._cgCtx.templatePath;
 		}
 	}
@@ -58,7 +59,7 @@ class TemplateContext {
 	 * @return {Object} with the output
 	 */
 	applyTemplate( baseInput = {}, output = {} ) {
-		return applyTemplate_recursive( this._fullTemplatePath, this._cgCtx, baseInput, output );
+		return applyTemplate_recursive( this._fullPath, this._cgCtx, baseInput, output );
 	}
 }
 
@@ -71,80 +72,6 @@ module.exports = TemplateContext;
 
 //---------------------------------
 //
-//  Utility function
-//
-//---------------------------------
-
-/**
- * Given the configured output, remap it accordingly
- * 
- * @param {Object} output 
- * @param {Object} templateOutput 
- * @param {*} outputRemap 
- */
-function processOutputRemap( output, templateOutput, outputRemap ) {
-	//
-	// Inner function used to join an output, if already exists
-	//
-	function joinOutput(key, value) {
-		if( output[key] && output[key].toString().trim().length > 0 ) {
-			output[key] = output[key]+"\n"+value
-		} else {
-			output[key] = value;
-		}
-	}
-
-	//
-	// Collapse output, into a single string - if configured
-	//
-	if( typeof outputRemap == "string" ) {
-		// Prepare the final output str
-		let outputStrArr = [];
-
-		// By joining the various key values
-		let keys = Object.keys(templateOutput).sort();
-		for( subKey of keys ) {
-			outputStrArr.push( templateOutput[subKey] );
-		}
-
-		// And set the output
-		joinOutput( outputRemap, outputStrArr.join("\n") );
-		return;
-	}
-
-	//
-	// Assumes an object otherwise, and map the keys to array/keys
-	//
-	for( outputKey of Object.keys(outputRemap).sort() ) {
-		// Get the output setting
-		let outputSet = outputRemap[outputKey];
-
-		// For the string set, do a direct remap
-		if( typeof outputSet == "string" ) {
-			joinOutput( outputRemap, templateOutput[ outputSet ] );
-			continue;
-		}
-
-		// For the array, iterate and join them
-		if( Array.isArray( outputSet ) ) {
-			let outputStrArr = [];
-			for( subKey of outputSet ) {
-				outputStrArr.push( templateOutput[subKey] );
-			}
-			joinOutput( outputRemap, outputStrArr.join("\n") );
-			continue;
-		}
-
-		// Unknown output setting type
-		throw "[FATAL ERROR]: Unknown outputRemap setting : "+JSON.stringify(outputRemap);
-	}
-
-	// return processed output
-	return output;
-}
-
-//---------------------------------
-//
 //  Recursive template setup
 //
 //---------------------------------
@@ -152,18 +79,18 @@ function processOutputRemap( output, templateOutput, outputRemap ) {
 /**
  * Apply template into the output object - recursively
  * 
- * @param {String} fullTemplatePath to scan for
+ * @param {String} fullPath to scan for
  * @param {ConfigamiContext} cgCtx to use
  * @param {Object} baseInput to initialize with
  * @param {Object} output to populate
  * 
  * @return {Object} for the formatted output
  */
-function applyTemplate_recursive( fullTemplatePath, cgCtx, baseInput, output ) {
+function applyTemplate_recursive( fullPath, cgCtx, baseInput, output ) {
 	//
 	// Get the current folder context input
 	//
-	let inputObj = getFolderContextInput(fullTemplatePath, baseInput, function(input) { 
+	let inputObj = getFolderContextInput(fullPath, baseInput, function(input) { 
 		// The configami context currently does not store a copyu of the input 
 		// - in the future we may add it in
 		return cgCtx;
@@ -172,18 +99,18 @@ function applyTemplate_recursive( fullTemplatePath, cgCtx, baseInput, output ) {
 	//
 	// Apply the template (without recursion)
 	//
-	applyTemplate_noRecursive( fullTemplatePath, cgCtx, jsonObjectClone(inputObj), output );
+	applyTemplate_noRecursive( fullPath, cgCtx, jsonObjectClone(inputObj), output );
 
 	//
 	// Scan for folders - to do recursion
 	//
-	const dirList = fsh.listSubDirectory( fullTemplatePath );
+	const dirList = fsh.listSubDirectory( fullPath );
 	for( const dirName of dirList ) {
 		// normalize output
 		output[dirName] = output[dirName] || {};
 
 		// and recursively resolve it
-		applyTemplate_recursive( path.resolve(fullTemplatePath, dirName), cgCtx, inputObj, output[dirName] );
+		applyTemplate_recursive( path.resolve(fullPath, dirName), cgCtx, inputObj, output[dirName] );
 	}
 
 	//
@@ -195,19 +122,19 @@ function applyTemplate_recursive( fullTemplatePath, cgCtx, baseInput, output ) {
 /**
  * Apply template into the output object - no recursion
  * 
- * @param {String} fullTemplatePath to scan for
+ * @param {String} fullPath to scan for
  * @param {ConfigamiContext} cgCtx to use
  * @param {Object} inputObj to use with (already scanned directory)
  * @param {Object} output to populate
  * 
  * @return {Object} for the formatted output
  */
-function applyTemplate_noRecursive( fullTemplatePath, cgCtx, inputObj, output ) {
+function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 
 	//
 	// Scan for template files
 	//
-	let fileList = fsh.listFileDirectory( fullTemplatePath );
+	let fileList = fsh.listFileDirectory( fullPath );
 
 	//
 	// Inner function - used to remove a fileName from the fileList
@@ -233,7 +160,7 @@ function applyTemplate_noRecursive( fullTemplatePath, cgCtx, inputObj, output ) 
 			continue;
 		}
 		// Full template file path
-		const templateFilePath = path.join( fullTemplatePath, fileName );
+		const templateFilePath = path.join( fullPath, fileName );
 
 		// The final output name (after relabeling - if needed)
 		let fileOutputName = fileName;
@@ -293,7 +220,7 @@ function applyTemplate_noRecursive( fullTemplatePath, cgCtx, inputObj, output ) 
 			continue;
 		}
 		// Full template file path
-		const templateFilePath = path.join( fullTemplatePath, fileName );
+		const templateFilePath = path.join( fullPath, fileName );
 
 		// The final output name (after relabeling)
 		const fileOutputName = strReplaceAll(fileName, ".configami-template", "");
@@ -311,7 +238,7 @@ function applyTemplate_noRecursive( fullTemplatePath, cgCtx, inputObj, output ) 
 	const templateFileNames = [ "template.configami.json", "template.configami.hjson" ];
 	for( const fileName of templateFileNames ) {
 		// Full template file path
-		const templateFilePath = path.join( fullTemplatePath, fileName );
+		const templateFilePath = path.join( fullPath, fileName );
 
 		// The templateJSON object, skip if null
 		const templateJSON =  handlebarsParse.hjsonFile( templateFilePath, inputObj, null );
@@ -323,14 +250,16 @@ function applyTemplate_noRecursive( fullTemplatePath, cgCtx, inputObj, output ) 
 	//
 	// 4. Apply the dynamic `template.configami.js` module (if it exists)
 	//
-	const templateFuncPath = path.resolve( fullTemplatePath, "template.configami.js" );
+	const templateFuncPath = path.resolve( fullPath, "template.configami.js" );
 	if( fsh.isFile( templateFuncPath ) ) {
 		// Load the template function
 		const templateFunc = require( templateFuncPath );
 		if( templateFunc == null ) {
 			throw "[FATAL ERROR] - Missing `module.exports = function` in template function : "+templateFuncPath
 		}
-		templateFunc( cgCtx, inputObj, output );
+
+		// Merge the output together, note that nothing happens if they are identical (which they should be)
+		output = nestedObjectAssign( output, templateFunc( cgCtx, inputObj, output ) );
 	}
 
 	//
