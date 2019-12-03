@@ -15,7 +15,7 @@ const helpers = require('handlebars-helpers')({
 //
 // Util functions
 //
-const getNested = require("../util/getNestedValue")
+const getNested = require("../struct/getNestedValue")
 
 //
 // Custom json2yaml handling

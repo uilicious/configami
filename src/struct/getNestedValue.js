@@ -18,7 +18,8 @@ function getNestedArr(obj, pathArr, initialize = false) {
 	// Get from object the value
 	let subObj = obj[subpath];
 	if( initialize == true && subObj == null ) {
-		subObj = obj[subpath] = {};
+		obj[subpath] = {};
+		subObj = obj[subpath];
 	}
 
 	// Null handling
@@ -32,7 +33,7 @@ function getNestedArr(obj, pathArr, initialize = false) {
 	}
 
 	// Recursion
-	getNestedArr( subObj, remainderArr, initialize );
+	return getNestedArr( subObj, remainderArr, initialize );
 }
 
 /**
