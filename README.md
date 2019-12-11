@@ -1,3 +1,7 @@
+# WIP WARNING (THIS IS INCOMPLETE, AND NOT PROPERLY DOCUMENTED - YOU BEEN WARNED)
+
+---
+
 # Configami
 
 - Configuration
