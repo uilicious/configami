@@ -1,0 +1,74 @@
+//
+// Default input settings to use
+// note that fallbacks are implemented by input.configami.js
+//
+{
+	// Namespace to use
+	//-------------------------------------------
+	"namespace" : "hello-namespace",
+	// "namespace-labels" : {
+	// 	"istio-injection": "enabled"
+	// },
+
+	// Deployment name to use
+	//-------------------------------------------
+	"name" : "hello-world",
+
+	// Container image to use
+	//-------------------------------------------
+	"image" : "picoded/hello-world",
+
+	// imagePullSecrets for image
+	//-------------------------------------------
+	// "imagePullSecrets": "gcr-ro",
+
+	// Container port to use
+	//-------------------------------------------
+	"port" : 80,
+
+	// Primary deployment node selectors
+	//-------------------------------------------
+	// "simpleNodeAffinity" : {
+	// 	"node":"true"
+	// },
+
+	// Primary workload count
+	//-------------------------------------------
+	"scale": 2,
+
+	/////////////////////////////////////////////
+	//
+	// Fallback Configurations
+	//
+	/////////////////////////////////////////////
+
+	// "fallback-config": {
+	// },
+
+	/////////////////////////////////////////////
+	//
+	// Service-lb Configurations
+	//
+	/////////////////////////////////////////////
+
+	"service-lb-config" : {
+		// Proxy image
+		"image" : "uilicious/nginx-http-simple-proxy",
+
+		// Overwrite
+		"port" :         80,
+		"portName":      "http-default",
+		"portProtocol" : "TCP",
+	},
+
+	/////////////////////////////////////////////
+	//
+	// Public ingress [optional]
+	//
+	/////////////////////////////////////////////
+
+	// "ingress": {
+	// 	"host": "awesome.example.com",
+	//		"secretName": "awesome-secret-for-tls"
+	// }
+}

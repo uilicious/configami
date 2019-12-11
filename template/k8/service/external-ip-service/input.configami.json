@@ -1,0 +1,13 @@
+{
+	"name": "hello",
+	// "namespace": "world",
+
+	// Ip list to use
+	// "ip-list": [],
+
+	// disable cluster IP by default
+	"clusterIP": "",
+
+	// Default port is 42, which is a wildcard
+	"port": 42
+}

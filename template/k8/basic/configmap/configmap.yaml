@@ -1,0 +1,13 @@
+##############################################################
+#
+# config mapping
+#
+##############################################################
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{name}}
+  namespace: {{namespace}}
+{{#json2yaml "_dataWrap"}}{{/json2yaml}}
+---

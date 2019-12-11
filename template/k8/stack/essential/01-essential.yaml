@@ -1,0 +1,226 @@
+---
+##############################################################
+#
+# Basic namespace setup
+#
+##############################################################
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: essential
+---
+##############################################################
+#
+# haveged daemonset
+#
+##############################################################
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: haveged
+  namespace: essential
+spec:
+  selector:
+    matchLabels:
+        name: essential-haveged
+  template:
+    metadata:
+      labels:
+        name: essential-haveged
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: no-haveged
+                operator: NotIn
+                values:
+                - "true"
+              - key: no-essential
+                operator: NotIn
+                values:
+                - "true"
+      containers:
+        - image: picoded/haveged
+          imagePullPolicy: Always
+          name: haveged
+          resources:
+            requests:
+              memory: 4Mi
+            limits:
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: true
+            privileged: true
+---
+##############################################################
+#
+# logrotate daemonset
+#
+##############################################################
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: logrotate
+  namespace: essential
+spec:
+  selector:
+    matchLabels:
+        name: essential-logrotate
+  template:
+    metadata:
+      labels:
+        name: essential-logrotate
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: no-logrotate
+                operator: NotIn
+                values:
+                - "true"
+              - key: no-essential
+                operator: NotIn
+                values:
+                - "true"
+      containers:
+        - image: picoded/docker-logrotate
+          imagePullPolicy: Always
+          name: logrotate
+          resources:
+            requests:
+              memory: 4Mi
+            limits:
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: true
+            privileged: true
+          volumeMounts:
+          - mountPath: /var/lib/docker/containers
+            name: host-docker-container
+      volumes:
+      - hostPath:
+          path: /var/lib/docker/containers
+        name: host-docker-container
+---
+##############################################################
+#
+# docker-debug daemonset
+#
+##############################################################
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: docker-debug
+  namespace: essential
+spec:
+  selector:
+    matchLabels:
+        name: essential-docker-debug
+  template:
+    metadata:
+      labels:
+        name: essential-docker-debug
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: no-docker-debug
+                operator: NotIn
+                values:
+                - "true"
+              - key: no-essential
+                operator: NotIn
+                values:
+                - "true"
+      containers:
+        - image: docker
+          imagePullPolicy: Always
+          name: docker-debug
+          resources:
+            requests:
+              memory: 4Mi
+            limits:
+              memory: 16Mi
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+          volumeMounts:
+          - mountPath: /var/run/docker.sock
+            name: docker-sock
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /var/run/docker.sock
+          type: Socket
+        name: docker-sock
+---
+##############################################################
+#
+# hello-world daemonset
+#
+##############################################################
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: hello-world
+  namespace: essential
+spec:
+  selector:
+    matchLabels:
+        name: essential-hello-world
+  template:
+    metadata:
+      labels:
+        name: essential-hello-world
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: no-hello-world
+                operator: NotIn
+                values:
+                - "true"
+              - key: no-essential
+                operator: NotIn
+                values:
+                - "true"
+      containers:
+        - image: picoded/hello-world
+          name: hello-world
+          resources:
+            requests:
+              memory: 4Mi
+            limits:
+              memory: 16Mi
+---
+##############################################################
+#
+# hello-world service routing
+#
+##############################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world
+  namespace: essential
+spec:
+  clusterIP: None
+  ports:
+  - name: default
+    port: 42
+    protocol: TCP
+    targetPort: 42
+  selector:
+    name: "essential-hello-world"
+  sessionAffinity: None
+  type: ClusterIP
+---

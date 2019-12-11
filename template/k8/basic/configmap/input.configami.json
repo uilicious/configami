@@ -1,0 +1,16 @@
+//
+// Default input settings to use
+//
+{
+	// Namespace to use
+	//-------------------------------------------
+	"namespace" : "hello-namespace",
+	
+	// Deployment name to use
+	//-------------------------------------------
+	"name" : "hello-world",
+
+	// Data mapping to convert
+	//-------------------------------------------
+	// "data" : {}
+}

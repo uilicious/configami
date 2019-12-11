@@ -1,0 +1,92 @@
+##############################################################
+#
+# deployment
+#
+##############################################################
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{name}}
+  namespace: {{namespace}}
+  annotations:
+    workload.user.cattle.io/workloadselector: deployment-{{namespace}}-{{name}}
+spec:
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: deployment-{{namespace}}-{{name}}
+  replicas: {{scale}}
+  strategy:
+    rollingUpdate:
+      maxSurge: 99
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        workload.user.cattle.io/workloadselector: deployment-{{namespace}}-{{name}}
+      {{#if annotations}}
+      annotations:
+        {{#json2yaml "annotations"}}{{/json2yaml}}
+      {{/if}}
+    spec:
+      {{#if simpleNodeAffinity}}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              {{#each simpleNodeAffinity}}
+              - key: "{{@key}}"
+                operator: In
+                values:
+                - "{{this}}"
+              {{/each}}
+      {{/if}}
+      containers:
+      - name: {{name}}
+        image: "{{image}}"
+        imagePullPolicy: Always
+        {{#if commandArgsArray}}
+        args:
+          {{#json2yaml "commandArgsArray"}}{{/json2yaml}}
+        {{/if}}
+        {{#if _enviornmentJSON}}
+        {{#json2yaml "_enviornmentJSON"}}{{/json2yaml}}
+        {{/if}}
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - echo '### PRE STOP COMMAND STARTED - {{prestopTime_seconds}}s'; sleep {{prestopTime_seconds}}s;
+        resources:
+          requests:
+            {{#json2yaml "requests"}}{{/json2yaml}}
+          limits:
+            {{#json2yaml "limits"}}{{/json2yaml}}
+        {{#if volumeMounts}}
+        volumeMounts:
+        {{#json2yaml "volumeMounts"}}{{/json2yaml}}
+        {{/if}}
+        {{#if portsArray}}
+        ports:
+          {{#json2yaml "portsArray"}}{{/json2yaml}}
+        {{else}}
+        {{#if port}}
+        ports:
+        - containerPort: {{port}}
+        {{/if}}
+        {{/if}}
+      {{#if volumes}}
+      volumes:
+      {{#json2yaml "volumes"}}{{/json2yaml}}
+      {{/if}}
+      {{#if imagePullSecrets}}
+      imagePullSecrets:
+      - name: {{imagePullSecrets}}
+      {{/if}}
+      terminationGracePeriodSeconds: {{add prestopTime_seconds gracePeriod_seconds}}
+      restartPolicy: Always
+---

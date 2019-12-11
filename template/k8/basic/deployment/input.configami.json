@@ -1,0 +1,73 @@
+//
+// Default input settings to use
+//
+{
+	// Namespace to use
+	//-------------------------------------------
+	"namespace" : "hello-namespace",
+	
+	// Deployment name to use
+	//-------------------------------------------
+	"name" : "hello-world",
+
+	// Container to use
+	//-------------------------------------------
+	"image" : "picoded/hello-world",
+
+	// Simple node affinity
+	//-------------------------------------------
+	// "simpleNodeAffinity" : {
+	// 	"node":"true"
+	// },
+
+	// Workload scale count
+	//-------------------------------------------
+	"scale": 1,
+
+	// Resource request / limits
+	//-------------------------------------------
+	"requests" : {
+		"memory": "32Mi",
+		"cpu": "10m"
+	},
+	"limits" : {
+		"memory": "256Mi",
+		"cpu": "1000m"
+	},
+
+	// Prestop timming
+	//-------------------------------------------
+	// Number of seconds to wait before remoing a service
+	"prestopTime_seconds": 5,
+	"gracePeriod_seconds": 15,
+
+	// Command args array
+	//-------------------------------------------
+	// "commandArgsArray": []
+	
+	// Environment variables
+	//-------------------------------------------
+	// "env": {}
+	
+	// Annotations
+	//-------------------------------------------
+	// "annotations": {}
+	
+	// Simple Container port to use
+	//-------------------------------------------
+	// "port" : 80,
+
+	// Complex port settings to use in-place of port
+	//-------------------------------------------
+	// "portsArray" : [
+	// 	{
+	// 		"containerPort": 80,
+	// 		"protocol": "TCP",
+	// 		"hostPort": 30800
+	// 	}
+	// ],
+
+	// imagePullSecrets array of names
+	//-------------------------------------------
+	// "imagePullSecrets": "gcr-ro"
+}

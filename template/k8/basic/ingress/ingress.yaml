@@ -1,0 +1,32 @@
+##############################################################
+#
+# public ingress for : {{name}}
+#
+##############################################################
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{name}}
+  namespace: {{namespace}}
+  annotations:
+    {{#each ingressAnnotation}}
+    nginx.ingress.kubernetes.io/{{@key}}: "{{this}}"
+    {{/each}}
+spec:
+  rules:
+  - host: {{host}}
+    http:
+      paths:
+      {{#if ingressPath}}
+      {{#json2yaml "ingressPath"}}{{/json2yaml}}
+      {{else}}
+      - backend:
+          serviceName: {{serviceName}}
+          servicePort: {{servicePort}}
+      {{/if}}
+  tls:
+  - hosts:
+    - {{host}}
+    {{#if secretName}}secretName: {{secretName}}{{/if}}
+---

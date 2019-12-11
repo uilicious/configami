@@ -1,0 +1,60 @@
+//
+// Default input settings to use
+//
+{
+	// Host to use
+	//-------------------------------------------
+	"host": "localhost",
+
+	// Namespace to use
+	//-------------------------------------------
+	"namespace" : "hello-namespace",
+	
+	// Ingress name to use
+	//-------------------------------------------
+	"name" : "hello-world",
+
+	// Host path to support
+	//-------------------------------------------
+	"serviceName": "{{name}}",
+	"servicePort": 80,
+	
+	// path array mapping
+	//
+	// NOTE: serviceName / port is ignored if this is configured
+	//-------------------------------------------------------------
+	// "ingressPath": [
+	// 	{
+	// 		"backend": {
+	// 			"serviceName": "apirunner",
+	// 			"servicePort": 8080
+	// 		},
+	// 		"path": "/v0.0"
+	// 	}
+	// ],
+
+	// TLS cert to use
+	//-------------------------------------------
+	"secretName": "",
+	
+	// Ingress annotations 
+	// 
+	// with high default settings, as the app
+	// server is presumed to be in charge of timeouts
+	//------------------------------------------------------
+	"ingressAnnotation": {
+		// Request size limiting
+		"proxy-body-size": "100m",
+
+		// Data buffering settings
+		"proxy-request-buffering": "on",
+		"proxy-buffer-size": "8k",
+		"proxy-max-temp-file-size": "100m",
+
+		// Connection timeouts
+		"proxy-connect-timeout": "60s",
+		"keep-alive": "300s",
+		"proxy-read-timeout": "300s",
+		"proxy-send-timeout": "300s"
+	}
+}

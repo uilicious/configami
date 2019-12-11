@@ -1,0 +1,41 @@
+##############################################################
+#
+# service routing 
+#
+##############################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{name}}
+  namespace: {{namespace}}
+  annotations:
+    field.cattle.io/ipAddresses: "null"
+    field.cattle.io/targetDnsRecordIds: "null"
+    field.cattle.io/targetWorkloadIds: '["deployment:{{namespace}}:{{name}}"]'
+spec:
+  {{#if clusterIP}}
+  {{#contains clusterIP "None"}}
+  # No clusterIP is assigned - None
+  clusterIP: None
+  {{else}}
+  {{#contains clusterIP "auto"}}
+  # `clusterIP: "auto"` - nothing is assigned, lets system auto assign
+  {{else}}
+  # This is a fixed clusterIP to be assigned
+  clusterIP: {{clusterIP}}
+  {{/contains}}
+  {{/contains}}
+  {{else}}
+  # No clusterIP is assigned - None
+  clusterIP: None
+  {{/if}}
+  ports:
+  - name: {{portName}}
+    port: {{port}}
+    protocol: {{portProtocol}}
+    targetPort: {{port}}
+  selector:
+    workload.user.cattle.io/workloadselector: deployment-{{namespace}}-{{name}}
+  sessionAffinity: None
+  type: ClusterIP
+---

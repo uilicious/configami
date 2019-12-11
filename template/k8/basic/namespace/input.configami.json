@@ -1,0 +1,9 @@
+{
+	// name - for the namespace
+	"name" : "hello-namespace",
+
+	// optional labels - for the namespace
+	// "labels" : {
+	// 	"istio-injection": "enabled"
+	// }
+}

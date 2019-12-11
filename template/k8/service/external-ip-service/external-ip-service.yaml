@@ -1,0 +1,42 @@
+#
+# External ip service for : {{name}}
+#
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{name}}
+  {{#if namespace}}
+  namespace: {{namespace}}
+  {{/if}}
+  annotations:
+    field.cattle.io/ipAddresses: '{{{JSONstringify ip-list}}}'
+spec:
+  {{#if clusterIP}}
+  {{#contains clusterIP "auto"}}
+  {{else}}
+  clusterIP: {{clusterIP}}
+  {{/contains}}
+  {{else}}
+  clusterIP: None
+  {{/if}}
+  ports:
+    - protocol: TCP
+      port: {{port}}
+      targetPort: {{port}}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: {{name}}
+  {{#if namespace}}
+  namespace: {{namespace}}
+  {{/if}}
+subsets:
+  - addresses:
+      {{#each ip-list}}
+      - ip: {{this}}
+      {{/each}}
+    ports:
+      - port: {{port}}
+---

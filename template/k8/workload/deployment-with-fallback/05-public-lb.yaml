@@ -1,0 +1,30 @@
+{{#if ingress}}
+{{#if ingress.host}}
+##############################################################
+#
+# public ingress
+#
+##############################################################
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{name}}
+  namespace: {{namespace}}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+spec:
+  rules:
+  - host: {{ingress.host}}
+    http:
+      paths:
+      - backend:
+          serviceName: {{name}}-service-lb
+          servicePort: 80
+  tls:
+  - hosts:
+    - {{ingress.host}}
+    {{#if ingress.secretName}}secretName: {{ingress.secretName}}{{/if}}
+---
+{{/if}}
+{{/if}}
