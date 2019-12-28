@@ -8,17 +8,7 @@ let main = require("./setup/ExtendedSywacObj");
 //----------------------------------------------------
 // CLI arguments handling
 //----------------------------------------------------
-
-main.file("-t, --template   <template-path>", {
-	description: "template  sub-directory path (default to `./TEMPLATE`)"
-})
-main.file("-w, --workspace  <workspace-path>", {
-	description: "workspace sub-directory path (default to `./WORKSPACE`)"
-})
-main.layeredCheck((argv, context) => {
-	argv.template  = argv.template  || argv.t || "./TEMPLATE";
-	argv.workspace = argv.workspace || argv.w || "./WORKSPACE";
-})
+require("./setup/ArgumentsHandling")(main);
 
 //----------------------------------------------------
 // Help examples, and output styling

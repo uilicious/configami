@@ -1,7 +1,7 @@
 {
   "name": "configami-proj",
   "version": "1.0.0",
-  "description": "> Uilicious-Stack notes - this is temporararily within the Uilicious-Stack project,  > once the prototype is worked out, this will be migrated into its own dedicated repository",
+  "description": "Configuration File Origami",
   "main": "run.js",
   "scripts": {
     "test": "mocha \"./test/**/*.test.js\""
@@ -13,7 +13,9 @@
     "handlebars": "=4.5.3",
     "handlebars-helpers": "=0.10.0",
     "hjson": "=3.2.1",
-    "json2yaml": "=1.1.0"
+    "json2yaml": "=1.1.0",
+    "sywac": "=1.2.2",
+    "chalk": "=3.0.0"
   },
   "devDependencies": {
     "chai": "=4.2.0",
