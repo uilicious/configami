@@ -79,6 +79,21 @@ main.layeredCheck = function(handler) {
 
 //----------------------------------------------------
 //
+//  Additional flags (for noisy)
+//
+//----------------------------------------------------
+
+main.boolean("--trace", {
+	description: "Extremely verbose logging (used for dev-debugging)"
+})
+main.layeredCheck((argv, context) => {
+	if( argv.trace ) {
+		LoggerWithLevels.setAsTrace();
+	}
+});
+
+//----------------------------------------------------
+//
 //  Lets register some helper functions
 //
 //----------------------------------------------------
