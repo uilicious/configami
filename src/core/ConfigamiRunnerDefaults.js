@@ -4,7 +4,7 @@
 module.exports = {
 
 	// Various main directory path
-	"template_path"  : "TEMPLATE",
-	"workspace_path" : "WORKSPACE",
+	"template_path"  : "./TEMPLATE",
+	"workspace_path" : "./WORKSPACE",
 
 }

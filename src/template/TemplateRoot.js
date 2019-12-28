@@ -4,7 +4,7 @@
 //
 //---------------------------------
 
-const ConfigamiContext = require("./../ConfigamiContext");
+const ConfigamiContext = require("./../core/ConfigamiContext");
 const TemplateContext  = require("./TemplateContext");
 const isDirectory      = require("./../fs/isDirectory");
 

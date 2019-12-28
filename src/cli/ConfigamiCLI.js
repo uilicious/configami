@@ -31,5 +31,24 @@ require("./setup/PrefaceAndEpilogue")(main);
 
 // Parse and exit
 main.parseAndExit().then(argv => {
-	// console.log(argv._);
+	// Load the configami runner
+	const ConfigamiRunner = require("../core/ConfigamiRunner");
+
+	// Setup the initialization obj
+	let initObj = {};
+	if( argv.final_workspacePath.length > 0 ) {
+		initObj.workspace_path = final_workspacePath;
+	}
+	if( argv.final_templatePath.length > 0 ) {
+		initObj.template_path = final_templatePath;
+	}
+
+	// Initialize the configami runner
+	const runner = new ConfigamiRunner(initObj.final_projectPath, initObj);
+
+	// Log the run params
+	runner.logConfig();
+
+	// And run!
+	runner.run();
 });

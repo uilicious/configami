@@ -25,17 +25,20 @@ class ConfigamiRunner {
 	 * Setup configami with default sub path routing
 	 * 
 	 * @param {String|path} inProjDir directory considering all other folder paths
+	 * @param {Object}      initOverwrite [optional] initial config settings overwrites
 	 */
-	constructor( inProjDir ) {
+	constructor( inProjDir, initOverwrite ) {
 		// Load the working dir, and the config
 		this._projectDir = inProjDir;
-		this.projectConfig();
+		this.projectConfig( initOverwrite );
 	}
 
 	/**
+	 * @param {Object}      initOverwrite [optional] initial config settings overwrites
+	 * 
 	 * @return project configuration JSON object
 	 */
-	projectConfig() {
+	projectConfig(initOverwrite) {
 		// Get the cached config
 		if( this._projectConfig ) {
 			return this._projectConfig;
@@ -54,6 +57,11 @@ class ConfigamiRunner {
 		// Build the config object
 		let configObj = nestedObjAssign({}, require("./ConfigamiRunnerDefaults.js"));
 		configObj = nestedObjAssign(configObj, workingDirConfig);
+
+		// init setup overwrites
+		if( initOverwrite ) {
+			configObj = newstedObjAssign(configObj, initOverwrite);
+		}
 
 		// Cache it, and return it
 		this._projectConfig = configObj;

@@ -8,7 +8,7 @@ const path = require("path");
 const fsh  = require("./../fs/fs-helper");
 
 const TemplateRoot          = require("./../template/TemplateRoot");
-const ConfigamiContext      = require("./../ConfigamiContext");
+const ConfigamiContext      = require("./../core/ConfigamiContext");
 const getFolderContextInput = require("./../util/getFolderContextInput");
 const jsonObjectClone       = require("./../conv/jsonObjectClone");
 const handlebarsParse       = require("./../handlebars/handlebarsParse");
