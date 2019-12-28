@@ -8,11 +8,11 @@
 const path = require("path")
 
 // Project depdencies
-const WorkspaceRoot   = require("./workspace/WorkspaceRoot");
-const TemplateRoot    = require("./template/TemplateRoot");
-const fsh             = require("./fs/fs-helper");
-const hjsonParse      = require("./conv/hjsonParse");
-const nestedObjAssign = require("./struct/nestedObjAssign");
+const WorkspaceRoot   = require("../workspace/WorkspaceRoot");
+const TemplateRoot    = require("../template/TemplateRoot");
+const fsh             = require("../fs/fs-helper");
+const hjsonParse      = require("../conv/hjsonParse");
+const nestedObjAssign = require("../struct/nestedObjAssign");
 
 //---------------------------------
 //
