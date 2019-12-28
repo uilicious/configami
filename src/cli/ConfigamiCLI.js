@@ -44,7 +44,7 @@ main.parseAndExit().then(argv => {
 	}
 
 	// Initialize the configami runner
-	const runner = new ConfigamiRunner(initObj.final_projectPath, initObj);
+	const runner = new ConfigamiRunner(argv.final_projectPath, initObj);
 
 	// Log the run params
 	runner.logConfig();

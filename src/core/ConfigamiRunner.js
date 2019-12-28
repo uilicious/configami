@@ -60,7 +60,7 @@ class ConfigamiRunner {
 
 		// init setup overwrites
 		if( initOverwrite ) {
-			configObj = newstedObjAssign(configObj, initOverwrite);
+			configObj = nestedObjAssign(configObj, initOverwrite);
 		}
 
 		// Cache it, and return it

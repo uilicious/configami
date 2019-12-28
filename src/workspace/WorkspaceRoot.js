@@ -33,7 +33,7 @@ class WorkspaceRoot {
 	 */
 	constructor( inWorkspaceDir, inTemplateDir ) {
 		if( !fsh.isDirectory(inWorkspaceDir) ) {
-			throw "[FATAL ERROR] Setup of WorkspaceRoot is with an invalid directory "+inWorkspaceDir;
+			throw "[FATAL ERROR] Setup of WorkspaceRoot - invalid directory : "+inWorkspaceDir;
 		}
 		this.workspaceRootDir = inWorkspaceDir;
 		this.templateRootDir  = inTemplateDir;
