@@ -24,9 +24,11 @@ module.exports = function(main) {
     // Template, and workspace argument
     //
     main.file("-t, --template   <template_path>", {
+        hidden: true,
         description: "template  sub-directory path (default to `./TEMPLATE`)"
     })
     main.file("-w, --workspace  <workspace_path>", {
+        hidden: true,
         description: "workspace sub-directory path (default to `./WORKSPACE`)"
     })
     
@@ -54,8 +56,11 @@ module.exports = function(main) {
     main.positional('<project-path>', { paramsDesc: 'Project directory path, to run configami from' })
     main.layeredCheck((argv, context) => {
 
+        // Current working dir
+        const cwd = process.cwd();
+
         // Get the project pathing - and validate it
-        const projectPath = path.resolve( argv.project || argv["project-path"] );
+        const projectPath = path.resolve( cwd, argv.project || argv["project-path"] );
         if( !fsh.isDirectory(projectPath) ) {
             throw chalk.red(`ERROR - Missing project directory: '${projectPath}'`)+"\n"+chalk.dim("[Use -h for more help information]");
         }
