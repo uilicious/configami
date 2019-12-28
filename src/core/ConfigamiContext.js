@@ -16,7 +16,7 @@ class ConfigamiContext {
 	 * @param {Object} src 
 	 */
 	joinNestedObject(output, src) {
-		return require("./struct/nestedObjAssign")(output, src);
+		return require("../struct/nestedObjAssign")(output, src);
 	}
 
 	/**
@@ -28,7 +28,7 @@ class ConfigamiContext {
 	 */
 	applyTemplate( templatePath, input = {}, output = {} ) {
 		// Intentionally loaded here to avoid circular dependency
-		const TemplateContext = require("./template/TemplateContext");
+		const TemplateContext = require("../template/TemplateContext");
 
 		// Initialize the ConfigamiContext
 		let newCtx = new ConfigamiContext();
