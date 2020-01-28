@@ -107,6 +107,11 @@ function applyTemplate_recursive( fullPath, cgCtx, baseInput, output ) {
 	//
 	const dirList = fsh.listSubDirectory( fullPath );
 	for( const dirName of dirList ) {
+		// If file has ".configami" - skip
+		if( dirName.indexOf(".configami") >= 0 ) {
+			continue;
+		}
+
 		// normalize output
 		output[dirName] = output[dirName] || {};
 
