@@ -1,3 +1,13 @@
+//------------------------------------------
+// Dependencies
+//------------------------------------------
+const fsh = require("../fs/fs-helper");
+const path = require("path");
+
+//------------------------------------------
+// Class implementation
+//------------------------------------------
+
 /**
  * ConfigamiContext is the main reused public context, for various modules
  */
@@ -7,6 +17,8 @@ class ConfigamiContext {
 	 * Setup configami context, that is passed forward to various user / template modules
 	 */
 	constructor() {
+		// Lets load and expose filesystem-helper
+		this.fsh = fsh;
 	}
 
 	/**
@@ -38,6 +50,9 @@ class ConfigamiContext {
 		newCtx.templatePath     = templatePath;
 		newCtx.templateRootDir  = this.templateRootDir;
 		newCtx.workspaceRootDir = this.workspaceRootDir;
+
+		// Teplate path directory
+		newCtx.templatePathDir  = path.join(this.templateRootDir, templatePath);
 
 		// Get the template
 		let tCtx = new TemplateContext( newCtx );
