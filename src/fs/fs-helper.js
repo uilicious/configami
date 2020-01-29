@@ -1,26 +1,19 @@
 // Get the based fs-extra
 const fse = require("fs-extra");
 
-// The fs-helper module
-const fsh = {};
+// Build the FSH object
+const fsh = {
+	// The fs-helper module, with imports
+	listFile: require("./listFile"),
+	listSubDirectory: require("./listSubDirectory"),
+	copyFile: require("./copyFile"),
+	isFile: require("./isFile"),
+	isDirectory: require("./isDirectory"),
+	writeFile: require("./writeFile")
+};
 
-// Lets "clone over" fse functions
+// Lets "inherit" fse functions
 fsh.__proto__ = fse;
-
-// List of functions to import
-const functionList = [
-	"listFileDirectory",
-	"listSubDirectory",
-	"copyFile",
-	"isFile",
-	"isDirectory",
-	"writeFile"
-];
-
-// Importing the various functions
-for(const name of functionList) {
-	fsh[name] = require("./"+name);
-}
 
 // Module export
 module.exports = fsh;

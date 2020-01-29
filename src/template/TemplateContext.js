@@ -140,7 +140,7 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 	//
 	// Scan for template files
 	//
-	let fileList = fsh.listFileDirectory( fullPath );
+	let fileList = fsh.listFile( fullPath );
 
 	//
 	// Inner function - used to remove a fileName from the fileList

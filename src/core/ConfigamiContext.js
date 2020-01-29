@@ -1,8 +1,8 @@
 //------------------------------------------
 // Dependencies
 //------------------------------------------
-const fsh = require("../fs/fs-helper");
 const path = require("path");
+const ConfigamiContextUtils = require("./ConfigamiContextUtils");
 
 //------------------------------------------
 // Class implementation
@@ -17,8 +17,8 @@ class ConfigamiContext {
 	 * Setup configami context, that is passed forward to various user / template modules
 	 */
 	constructor() {
-		// Lets load and expose filesystem-helper
-		this.fsh = fsh;
+		// Lets load and expose the util librarie
+		this.util = ConfigamiContextUtils;
 	}
 
 	/**
