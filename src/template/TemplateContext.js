@@ -91,7 +91,7 @@ function applyTemplate_recursive( fullPath, cgCtx, baseInput, output ) {
 	//
 	// Get the current folder context input
 	//
-	let inputObj = getFolderContextInput(fullPath, baseInput, function(input) { 
+	let inputObj = getFolderContextInput(cgCtx, fullPath, baseInput, function(input) { 
 		// The configami context currently does not store a copyu of the input 
 		// - in the future we may add it in
 		return cgCtx;
