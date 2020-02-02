@@ -69,6 +69,21 @@ class ConfigamiRunner {
 	}
 
 	/**
+	 * @return the workspace scan directory
+	 */
+	getWorkspaceScanDir() {
+		// Get and normalize scan dir
+		let scanDir = this.projectConfig()["workspace_scanDir"];
+		if( scanDir != null ) {
+			scanDir = path.normalize(scanDir);
+		}
+		if( scanDir == "." || scanDir == "" ) {
+			scanDir = null
+		}
+		return scanDir;
+	}
+
+	/**
 	 * Log out the basic summary of the configami config
 	 */
 	logConfig() {
@@ -77,8 +92,14 @@ class ConfigamiRunner {
 		console.log("|   Assuming the following configami project file path:")
 		console.log("|   "+this._projectDir);
 		console.log("|")
-		console.log("|   template_path  : "+this.projectConfig()["template_path"]);
-		console.log("|   workspace_path : "+this.projectConfig()["workspace_path"]);
+		console.log("|   template path  : "+this.projectConfig()["template_path"]);
+		console.log("|   workspace path : "+this.projectConfig()["workspace_path"]);
+
+		// Log the scan space if its used
+		if( this.getWorkspaceScanDir() != null ) {
+			console.log("|   workspace scan : "+this.getWorkspaceScanDir());
+		}
+
 		console.log("|")
 		console.log("--------------------------------------------------------------------")
 	}
@@ -137,17 +158,8 @@ class ConfigamiRunner {
 	 * Trigger the run sequence
 	 */
 	run() {
-		// Get and normalize scan dir
-		let scanDir = this.projectConfig()["workspace_scanDir"];
-		if( scanDir != null ) {
-			scanDir = path.normalize(scanDir);
-		}
-		if( scanDir == "." || scanDir == "" ) {
-			scanDir = null
-		}
-
 		// Get the workspace root - and apply it
-		this.getWorkspaceRoot().applyPlan( scanDir );
+		this.getWorkspaceRoot().applyPlan( this.getWorkspaceScanDir() );
 	}
 }
 

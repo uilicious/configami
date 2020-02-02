@@ -92,8 +92,8 @@ class WorkspaceRoot {
 	 * @param {String} workspaceScanDir to scan for plans to apply
 	 */
 	applyPlan( workspaceScanDir = null ) {
-		let outputObj = this.applyPlan_toOutputObj();
-		applyOutputObjectIntoWorkDir( outputObj, this.workspaceRootDir, workspaceScanDir );
+		let outputObj = this.applyPlan_toOutputObj( workspaceScanDir );
+		applyOutputObjectIntoWorkDir( outputObj, this.workspaceRootDir );
 	}
 }
 
@@ -170,6 +170,13 @@ function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output, 
 		return cgCtx;
 	}, true); // final true, is for workspace mode
 
+	// 
+	// Null out empty scanDir
+	//
+	if( scanDir == "" ) {
+		scanDir = null;
+	}
+
 	//
 	// Apply the workspace plans (without recursion)
 	// if there is no `scanDirArray` filter
@@ -207,19 +214,24 @@ function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output, 
 		// Prepare the "next" scanDir
 		//
 		let scanDirArr = scanDir.split("/")
-		let subDir = scanDirArr[0]
-		let nextScanDir = scanDir.slice(1).join("/")
+		let scanSubDir = scanDirArr[0]
+		let nextScanDir = scanDirArr.slice(1).join("/")
 	
 		// Derive the new path
 		let nxtWorkspacePath = "";
 		if( workspacePath == "" ) {
-			nxtWorkspacePath = subDir;
+			nxtWorkspacePath = scanSubDir;
 		} else {
-			nxtWorkspacePath = path.join(workspacePath, subDir);
+			nxtWorkspacePath = path.join(workspacePath, scanSubDir);
 		}
 
+		// normalize output
+		output[scanSubDir] = output[scanSubDir] || {};
+		
+		//
 		// and recursively resolve it
-		applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName], nextScanDir );
+		//
+		applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[scanSubDir], nextScanDir );
 	}
 
 	//
