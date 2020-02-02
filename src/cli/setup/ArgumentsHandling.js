@@ -24,12 +24,17 @@ module.exports = function(main) {
     // Template, and workspace argument
     //
     main.file("-t, --template   <template_path>", {
-        hidden: true,
+        hidden: false,
         description: "template  sub-directory path (default to `./TEMPLATE`)"
     })
     main.file("-w, --workspace  <workspace_path>", {
-        hidden: true,
+        hidden: false,
         description: "workspace sub-directory path (default to `./WORKSPACE`)"
+    })
+    
+    main.file("-s, --workspaceScanDir  <workspace_scanDir>", {
+        hidden: false,
+        description: "workspace sub-directory to scan for plans (default to ``)"
     })
     
     //
@@ -48,6 +53,7 @@ module.exports = function(main) {
     main.layeredCheck((argv, context) => {
         argv.template  = argv.template_path  || argv.template  || argv.t || "";
         argv.workspace = argv.workspace_path || argv.workspace || argv.w || "";
+        argv.workspaceScanDir = argv.workspace_scanDir || argv.workspaceScanDir || argv.s || "";
     })
 
     //

@@ -78,18 +78,22 @@ class WorkspaceRoot {
 	/**
 	 * Scan the workspace, and apply the respective plans and get the output object
 	 * 
+	 * @param {String} workspaceScanDir to scan for plans to apply
+	 * 
 	 * @return {*} output object (for testing?)
 	 */
-	applyPlan_toOutputObj() {
-		return applyWorkspacePlan_recursive(this, "", {}, {});
+	applyPlan_toOutputObj( workspaceScanDir = null ) {
+		return applyWorkspacePlan_recursive(this, "", {}, {}, workspaceScanDir);
 	}
 
 	/**
 	 * Scan the workspace, and apply the respective plans and get the output file
+	 * 
+	 * @param {String} workspaceScanDir to scan for plans to apply
 	 */
-	applyPlan() {
+	applyPlan( workspaceScanDir = null ) {
 		let outputObj = this.applyPlan_toOutputObj();
-		applyOutputObjectIntoWorkDir( outputObj, this.workspaceRootDir );
+		applyOutputObjectIntoWorkDir( outputObj, this.workspaceRootDir, workspaceScanDir );
 	}
 }
 
@@ -141,13 +145,14 @@ function applyOutputObjectIntoWorkDir( output, wrkDir ) {
  * Apply workspace plans into the output object - recursively
  * 
  * @param {WorkspaceRoot} wRoot workspace root to use
- * @param {String} workspacePath to scan within wRoot
- * @param {Object} baseInput to initialize with
- * @param {Object} output to populate
+ * @param {String}   workspacePath to scan within wRoot
+ * @param {Object}   baseInput to initialize with
+ * @param {Object}   output to populate
+ * @param {String}   scanDir dir paths to reduce the scope of "plan" scanning within
  * 
  * @return {Object} for the formatted output
  */
-function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output ) {
+function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output, scanDir = null ) {
 	//
 	// Get the fullPath and cgCtx first
 	//
@@ -167,27 +172,54 @@ function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output )
 
 	//
 	// Apply the workspace plans (without recursion)
+	// if there is no `scanDirArray` filter
 	//
-	applyWorkspacePlan_noRecursive( fullPath, cgCtx, jsonObjectClone(inputObj), output );
+	// And apply the full recursion
+	//
+	if( scanDir == null ) {
+		// Apply workspace plans (if needed)
+		applyWorkspacePlan_noRecursive( fullPath, cgCtx, jsonObjectClone(inputObj), output );
 
-	//
-	// Scan for folders - to do recursion
-	//
-	const dirList = fsh.listSubDirectory( fullPath );
-	for( const dirName of dirList ) {
-		// normalize output
-		output[dirName] = output[dirName] || {};
+		// Scan for folders - to do recursion
+		const dirList = fsh.listSubDirectory( fullPath );
+		for( const dirName of dirList ) {
+			// normalize output
+			output[dirName] = output[dirName] || {};
 
+			// Derive the new path
+			let nxtWorkspacePath = "";
+			if( workspacePath == "" ) {
+				nxtWorkspacePath = dirName;
+			} else {
+				nxtWorkspacePath = path.join(workspacePath, dirName);
+			}
+
+			// and recursively resolve it
+			applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName], null );
+		}
+	} 
+	
+	//
+	// Else, lets Prepare the "next" scanDir
+	//
+	if( scanDir != null ) {
+		//
+		// Prepare the "next" scanDir
+		//
+		let scanDirArr = scanDir.split("/")
+		let subDir = scanDirArr[0]
+		let nextScanDir = scanDir.slice(1).join("/")
+	
 		// Derive the new path
 		let nxtWorkspacePath = "";
 		if( workspacePath == "" ) {
-			nxtWorkspacePath = dirName;
+			nxtWorkspacePath = subDir;
 		} else {
-			nxtWorkspacePath = path.join(workspacePath, dirName);
+			nxtWorkspacePath = path.join(workspacePath, subDir);
 		}
 
 		// and recursively resolve it
-		applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName] );
+		applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName], nextScanDir );
 	}
 
 	//

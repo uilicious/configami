@@ -37,10 +37,13 @@ main.parseAndExit().then(argv => {
 	// Setup the initialization obj
 	let initObj = {};
 	if( argv.final_workspacePath.length > 0 ) {
-		initObj.workspace_path = final_workspacePath;
+		initObj.workspace_path = argv.final_workspacePath;
 	}
 	if( argv.final_templatePath.length > 0 ) {
-		initObj.template_path = final_templatePath;
+		initObj.template_path = argv.final_templatePath;
+	}
+	if( argv.workspaceScanDir.length > 0 ) {
+		initObj.workspace_scanDir = argv.workspaceScanDir;
 	}
 
 	// Initialize the configami runner

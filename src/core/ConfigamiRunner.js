@@ -137,8 +137,17 @@ class ConfigamiRunner {
 	 * Trigger the run sequence
 	 */
 	run() {
+		// Get and normalize scan dir
+		let scanDir = this.projectConfig()["workspace_scanDir"];
+		if( scanDir != null ) {
+			scanDir = path.normalize(scanDir);
+		}
+		if( scanDir == "." || scanDir == "" ) {
+			scanDir = null
+		}
+
 		// Get the workspace root - and apply it
-		this.getWorkspaceRoot().applyPlan();
+		this.getWorkspaceRoot().applyPlan( scanDir );
 	}
 }
 
