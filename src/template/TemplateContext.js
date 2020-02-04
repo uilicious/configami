@@ -156,6 +156,11 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 	// 1. Apply the static files
 	//
 	for( const fileName of fileList ) {
+		// Ignore hidden ".x" file, specifically the ".DS_STORE"
+		if( fileName.startsWith(".") ) {
+			continue;
+		}
+
 		// If file has ".configami" - skip
 		if( fileName.indexOf(".configami") >= 0 ) {
 			continue;
@@ -216,6 +221,11 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 	// 2. Apply the dynamic `.configami-template` files
 	//
 	for( const fileName of fileList ) {
+		// Ignore hidden ".x" file, specifically the ".DS_STORE"
+		if( fileName.startsWith(".") ) {
+			continue;
+		}
+		
 		// If missing ".configami-template" - skip
 		if( fileName.indexOf(".configami-template") < 0 ) {
 			continue;

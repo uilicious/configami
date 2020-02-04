@@ -58,11 +58,16 @@ const fse        = require("fs-extra")
  * @param {*} fallback 
  */
 function stringFile( filePath, data, fallback = null ) {
-	// Valid object
-	if( isFile(filePath) ) {
-		// Parse the file string
-		let fileStr = fse.readFileSync( filePath, { encoding:"utf8" } );
-		return handlebarsParse( fileStr, data );
+	try {
+		// Valid object
+		if( isFile(filePath) ) {
+			// Parse the file string
+			let fileStr = fse.readFileSync( filePath, { encoding:"utf8" } );
+			return handlebarsParse( fileStr, data );
+		}
+	} catch(e) {
+		console.error("Unable to process file: "+filePath);
+		throw e;
 	}
 	// No file fallback
 	return fallback;
@@ -82,7 +87,7 @@ function hjsonFile( filePath, data, fallback = null ) {
 	if( fileStr ) {
 		return hjsonParse( fileStr, filePath );
 	}
-	
+
 	// No file fallback
 	return fallback;
 }
