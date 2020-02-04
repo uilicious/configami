@@ -8,11 +8,11 @@
 const path = require("path")
 
 // Project depdencies
-const WorkspaceRoot   = require("./workspace/WorkspaceRoot");
-const TemplateRoot    = require("./template/TemplateRoot");
-const fsh             = require("./fs/fs-helper");
-const hjsonParse      = require("./conv/hjsonParse");
-const nestedObjAssign = require("./struct/nestedObjAssign");
+const WorkspaceRoot   = require("../workspace/WorkspaceRoot");
+const TemplateRoot    = require("../template/TemplateRoot");
+const fsh             = require("../fs/fs-helper");
+const hjsonParse      = require("../conv/hjsonParse");
+const nestedObjAssign = require("../struct/nestedObjAssign");
 
 //---------------------------------
 //
@@ -25,17 +25,20 @@ class ConfigamiRunner {
 	 * Setup configami with default sub path routing
 	 * 
 	 * @param {String|path} inProjDir directory considering all other folder paths
+	 * @param {Object}      initOverwrite [optional] initial config settings overwrites
 	 */
-	constructor( inProjDir ) {
+	constructor( inProjDir, initOverwrite ) {
 		// Load the working dir, and the config
 		this._projectDir = inProjDir;
-		this.projectConfig();
+		this.projectConfig( initOverwrite );
 	}
 
 	/**
+	 * @param {Object}      initOverwrite [optional] initial config settings overwrites
+	 * 
 	 * @return project configuration JSON object
 	 */
-	projectConfig() {
+	projectConfig(initOverwrite) {
 		// Get the cached config
 		if( this._projectConfig ) {
 			return this._projectConfig;
@@ -55,9 +58,29 @@ class ConfigamiRunner {
 		let configObj = nestedObjAssign({}, require("./ConfigamiRunnerDefaults.js"));
 		configObj = nestedObjAssign(configObj, workingDirConfig);
 
+		// init setup overwrites
+		if( initOverwrite ) {
+			configObj = nestedObjAssign(configObj, initOverwrite);
+		}
+
 		// Cache it, and return it
 		this._projectConfig = configObj;
 		return this._projectConfig;
+	}
+
+	/**
+	 * @return the workspace scan directory
+	 */
+	getWorkspaceScanDir() {
+		// Get and normalize scan dir
+		let scanDir = this.projectConfig()["workspace_scanDir"];
+		if( scanDir != null ) {
+			scanDir = path.normalize(scanDir);
+		}
+		if( scanDir == "." || scanDir == "" ) {
+			scanDir = null
+		}
+		return scanDir;
 	}
 
 	/**
@@ -69,8 +92,14 @@ class ConfigamiRunner {
 		console.log("|   Assuming the following configami project file path:")
 		console.log("|   "+this._projectDir);
 		console.log("|")
-		console.log("|   template_path  : "+this.projectConfig()["template_path"]);
-		console.log("|   workspace_path : "+this.projectConfig()["workspace_path"]);
+		console.log("|   template path  : "+this.projectConfig()["template_path"]);
+		console.log("|   workspace path : "+this.projectConfig()["workspace_path"]);
+
+		// Log the scan space if its used
+		if( this.getWorkspaceScanDir() != null ) {
+			console.log("|   workspace scan : "+this.getWorkspaceScanDir());
+		}
+
 		console.log("|")
 		console.log("--------------------------------------------------------------------")
 	}
@@ -130,7 +159,7 @@ class ConfigamiRunner {
 	 */
 	run() {
 		// Get the workspace root - and apply it
-		this.getWorkspaceRoot().applyPlan();
+		this.getWorkspaceRoot().applyPlan( this.getWorkspaceScanDir() );
 	}
 }
 

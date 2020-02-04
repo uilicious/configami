@@ -11,7 +11,7 @@ const isFile = require("./isFile")
  * @param {String} dirPath to scan
  * @return {String[]} list of file names
  */
-function listFileDirectory( dirPath ) {
+function listFile( dirPath ) {
 	// The return array
 	let ret = [];
 
@@ -29,4 +29,4 @@ function listFileDirectory( dirPath ) {
 }
 
 // Actual module export
-module.exports = listFileDirectory;
+module.exports = listFile;

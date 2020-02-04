@@ -11,17 +11,24 @@ const nestedObjAssign = require("./../struct/nestedObjAssign")
 /**
  * Scans the given folder path for input settings, and return it combined with the baseInput
  * 
- * @param {String}   folderPath  to scan for various input settings
- * @param {Object}   baseInput   to combined with (note this is not modified)
- * @param {Function} cgCtxFunc   to setup, and return configami context, given the current input
- * @param {Boolean}  isWorkspace should be configured true, for workspace plans
+ * @param {ConfigamiContext} cgCtx       configami context to setup from
+ * @param {String}           folderPath  to scan for various input settings
+ * @param {Object}           baseInput   to combined with (note this is not modified)
+ * @param {Function}         cgCtxFunc   to setup, and return configami context, given the current input
+ * @param {Boolean}          isWorkspace should be configured true, for workspace plans
  * 
  * @return {Object} final input object
  */
-function getFolderContextInput( folderPath, baseInput, cgCtxFunc, isWorkspace = false ) {
+function getFolderContextInput( cgCtx, folderPath, baseInput, cgCtxFunc, isWorkspace = false ) {
 
 	// Prepare the base return object
-	let ret = jsonObjectClone( baseInput || {} );
+	let ret = {
+		"_cgCtx": {
+			templateRootDir:  cgCtx.templateRootDir,
+			workspaceRootDir: cgCtx.workspaceRootDir
+		}
+	};
+	ret = nestedObjAssign( ret, jsonObjectClone( baseInput || {} ) );
 
 	// HJSON input files to support (if valid)
 	const hjsonInputList = [ "input.configami.json", "input.configami.hjson" ]

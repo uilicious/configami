@@ -8,7 +8,7 @@ const path = require("path");
 const fsh  = require("./../fs/fs-helper");
 
 const TemplateRoot          = require("./../template/TemplateRoot");
-const ConfigamiContext      = require("./../ConfigamiContext");
+const ConfigamiContext      = require("./../core/ConfigamiContext");
 const getFolderContextInput = require("./../util/getFolderContextInput");
 const jsonObjectClone       = require("./../conv/jsonObjectClone");
 const handlebarsParse       = require("./../handlebars/handlebarsParse");
@@ -33,7 +33,7 @@ class WorkspaceRoot {
 	 */
 	constructor( inWorkspaceDir, inTemplateDir ) {
 		if( !fsh.isDirectory(inWorkspaceDir) ) {
-			throw "[FATAL ERROR] Setup of WorkspaceRoot is with an invalid directory "+inWorkspaceDir;
+			throw "[FATAL ERROR] Setup of WorkspaceRoot - invalid directory : "+inWorkspaceDir;
 		}
 		this.workspaceRootDir = inWorkspaceDir;
 		this.templateRootDir  = inTemplateDir;
@@ -78,17 +78,21 @@ class WorkspaceRoot {
 	/**
 	 * Scan the workspace, and apply the respective plans and get the output object
 	 * 
+	 * @param {String} workspaceScanDir to scan for plans to apply
+	 * 
 	 * @return {*} output object (for testing?)
 	 */
-	applyPlan_toOutputObj() {
-		return applyWorkspacePlan_recursive(this, "", {}, {});
+	applyPlan_toOutputObj( workspaceScanDir = null ) {
+		return applyWorkspacePlan_recursive(this, "", {}, {}, workspaceScanDir);
 	}
 
 	/**
 	 * Scan the workspace, and apply the respective plans and get the output file
+	 * 
+	 * @param {String} workspaceScanDir to scan for plans to apply
 	 */
-	applyPlan() {
-		let outputObj = this.applyPlan_toOutputObj();
+	applyPlan( workspaceScanDir = null ) {
+		let outputObj = this.applyPlan_toOutputObj( workspaceScanDir );
 		applyOutputObjectIntoWorkDir( outputObj, this.workspaceRootDir );
 	}
 }
@@ -141,13 +145,14 @@ function applyOutputObjectIntoWorkDir( output, wrkDir ) {
  * Apply workspace plans into the output object - recursively
  * 
  * @param {WorkspaceRoot} wRoot workspace root to use
- * @param {String} workspacePath to scan within wRoot
- * @param {Object} baseInput to initialize with
- * @param {Object} output to populate
+ * @param {String}   workspacePath to scan within wRoot
+ * @param {Object}   baseInput to initialize with
+ * @param {Object}   output to populate
+ * @param {String}   scanDir dir paths to reduce the scope of "plan" scanning within
  * 
  * @return {Object} for the formatted output
  */
-function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output ) {
+function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output, scanDir = null ) {
 	//
 	// Get the fullPath and cgCtx first
 	//
@@ -159,35 +164,74 @@ function applyWorkspacePlan_recursive( wRoot, workspacePath, baseInput, output )
 	//
 	// Get the current folder context input
 	//
-	let inputObj = getFolderContextInput(fullPath, baseInput, function(input) { 
+	let inputObj = getFolderContextInput(cgCtx, fullPath, baseInput, function(input) { 
 		// The configami context currently does not store a copy of the input 
 		// - in the future we may add it in
 		return cgCtx;
 	}, true); // final true, is for workspace mode
 
+	// 
+	// Null out empty scanDir
+	//
+	if( scanDir == "" ) {
+		scanDir = null;
+	}
+
 	//
 	// Apply the workspace plans (without recursion)
+	// if there is no `scanDirArray` filter
 	//
-	applyWorkspacePlan_noRecursive( fullPath, cgCtx, jsonObjectClone(inputObj), output );
+	// And apply the full recursion
+	//
+	if( scanDir == null ) {
+		// Apply workspace plans (if needed)
+		applyWorkspacePlan_noRecursive( fullPath, cgCtx, jsonObjectClone(inputObj), output );
 
-	//
-	// Scan for folders - to do recursion
-	//
-	const dirList = fsh.listSubDirectory( fullPath );
-	for( const dirName of dirList ) {
-		// normalize output
-		output[dirName] = output[dirName] || {};
+		// Scan for folders - to do recursion
+		const dirList = fsh.listSubDirectory( fullPath );
+		for( const dirName of dirList ) {
+			// normalize output
+			output[dirName] = output[dirName] || {};
 
+			// Derive the new path
+			let nxtWorkspacePath = "";
+			if( workspacePath == "" ) {
+				nxtWorkspacePath = dirName;
+			} else {
+				nxtWorkspacePath = path.join(workspacePath, dirName);
+			}
+
+			// and recursively resolve it
+			applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName], null );
+		}
+	} 
+	
+	//
+	// Else, lets Prepare the "next" scanDir
+	//
+	if( scanDir != null ) {
+		//
+		// Prepare the "next" scanDir
+		//
+		let scanDirArr = scanDir.split("/")
+		let scanSubDir = scanDirArr[0]
+		let nextScanDir = scanDirArr.slice(1).join("/")
+	
 		// Derive the new path
 		let nxtWorkspacePath = "";
 		if( workspacePath == "" ) {
-			nxtWorkspacePath = dirName;
+			nxtWorkspacePath = scanSubDir;
 		} else {
-			nxtWorkspacePath = path.join(workspacePath, dirName);
+			nxtWorkspacePath = path.join(workspacePath, scanSubDir);
 		}
 
+		// normalize output
+		output[scanSubDir] = output[scanSubDir] || {};
+		
+		//
 		// and recursively resolve it
-		applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[dirName] );
+		//
+		applyWorkspacePlan_recursive( wRoot, nxtWorkspacePath, inputObj, output[scanSubDir], nextScanDir );
 	}
 
 	//
@@ -226,15 +270,29 @@ function applyWorkspacePlan_noRecursive( fullPath, cgCtx, inputObj, output ) {
 			return;
 		}
 
+		// Input object remapping
+		// This uses the following 
+		//
+		// - template.input OR parent input object
+		// - merged with template.input_merge (if present)
+		// - overwrite with template.input_overwrite (if present)
+		let templateInput = jsonObjectClone( tObj.input || inputObj || {} );
+		if( tObj.input_merge ) {
+			nestedObjectAssign( templateInput, input_merge );
+		}
+		if( tObj.input_overwrite ) {
+			Object.assign( templateInput, tObj.input_overwrite );
+		}
+
 		// Output remapping support
 		let outputRemap = tObj.outputRemap || outputRemapFallback;
 		if( outputRemap ) {
 			// Generate the output
-			let templateOutput = cgCtx.applyTemplate( tObj.template, tObj.input || inputObj, {} );
+			let templateOutput = cgCtx.applyTemplate( tObj.template, templateInputj, {} );
 			processOutputRemap( output, templateOutput, outputRemap );
 		} else {
 			// Apply the template directly
-			cgCtx.applyTemplate( tObj.template, tObj.input || inputObj, output );
+			cgCtx.applyTemplate( tObj.template, templateInput, output );
 		}
 	}
 

@@ -1,3 +1,13 @@
+//------------------------------------------
+// Dependencies
+//------------------------------------------
+const path = require("path");
+const ConfigamiContextUtils = require("./ConfigamiContextUtils");
+
+//------------------------------------------
+// Class implementation
+//------------------------------------------
+
 /**
  * ConfigamiContext is the main reused public context, for various modules
  */
@@ -7,6 +17,8 @@ class ConfigamiContext {
 	 * Setup configami context, that is passed forward to various user / template modules
 	 */
 	constructor() {
+		// Lets load and expose the util librarie
+		this.util = ConfigamiContextUtils;
 	}
 
 	/**
@@ -16,7 +28,7 @@ class ConfigamiContext {
 	 * @param {Object} src 
 	 */
 	joinNestedObject(output, src) {
-		return require("./struct/nestedObjAssign")(output, src);
+		return require("../struct/nestedObjAssign")(output, src);
 	}
 
 	/**
@@ -28,7 +40,7 @@ class ConfigamiContext {
 	 */
 	applyTemplate( templatePath, input = {}, output = {} ) {
 		// Intentionally loaded here to avoid circular dependency
-		const TemplateContext = require("./template/TemplateContext");
+		const TemplateContext = require("../template/TemplateContext");
 
 		// Initialize the ConfigamiContext
 		let newCtx = new ConfigamiContext();
@@ -38,6 +50,9 @@ class ConfigamiContext {
 		newCtx.templatePath     = templatePath;
 		newCtx.templateRootDir  = this.templateRootDir;
 		newCtx.workspaceRootDir = this.workspaceRootDir;
+
+		// Teplate path directory
+		newCtx.templatePathDir  = path.join(this.templateRootDir, templatePath);
 
 		// Get the template
 		let tCtx = new TemplateContext( newCtx );

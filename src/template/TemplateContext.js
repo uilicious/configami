@@ -7,7 +7,7 @@
 const path = require("path");
 const fsh  = require("./../fs/fs-helper");
 
-const ConfigamiContext      = require("./../ConfigamiContext");
+const ConfigamiContext      = require("./../core/ConfigamiContext");
 const getFolderContextInput = require("./../util/getFolderContextInput");
 const jsonObjectClone       = require("./../conv/jsonObjectClone");
 const handlebarsParse       = require("./../handlebars/handlebarsParse");
@@ -91,7 +91,7 @@ function applyTemplate_recursive( fullPath, cgCtx, baseInput, output ) {
 	//
 	// Get the current folder context input
 	//
-	let inputObj = getFolderContextInput(fullPath, baseInput, function(input) { 
+	let inputObj = getFolderContextInput(cgCtx, fullPath, baseInput, function(input) { 
 		// The configami context currently does not store a copyu of the input 
 		// - in the future we may add it in
 		return cgCtx;
@@ -107,6 +107,11 @@ function applyTemplate_recursive( fullPath, cgCtx, baseInput, output ) {
 	//
 	const dirList = fsh.listSubDirectory( fullPath );
 	for( const dirName of dirList ) {
+		// If file has ".configami" - skip
+		if( dirName.indexOf(".configami") >= 0 ) {
+			continue;
+		}
+
 		// normalize output
 		output[dirName] = output[dirName] || {};
 
@@ -135,7 +140,7 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 	//
 	// Scan for template files
 	//
-	let fileList = fsh.listFileDirectory( fullPath );
+	let fileList = fsh.listFile( fullPath );
 
 	//
 	// Inner function - used to remove a fileName from the fileList
@@ -205,15 +210,29 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 			return;
 		}
 
+		// Input object remapping
+		// This uses the following 
+		//
+		// - template.input OR parent input object
+		// - merged with template.input_merge (if present)
+		// - overwrite with template.input_overwrite (if present)
+		let templateInput = jsonObjectClone( tObj.input || inputObj || {} );
+		if( tObj.input_merge ) {
+			nestedObjectAssign( templateInput, input_merge );
+		}
+		if( tObj.input_overwrite ) {
+			Object.assign( templateInput, tObj.input_overwrite );
+		}
+
 		// Output remapping support
 		let outputRemap = tObj.outputRemap || outputRemapFallback;
 		if( outputRemap ) {
 			// Generate the output
-			let templateOutput = cgCtx.applyTemplate( tObj.template, tObj.input || inputObj, {} );
+			let templateOutput = cgCtx.applyTemplate( tObj.template, templateInput, {} );
 			processOutputRemap( output, templateOutput, outputRemap );
 		} else {
 			// Apply the template directly
-			cgCtx.applyTemplate( tObj.template, tObj.input || inputObj, output );
+			cgCtx.applyTemplate( tObj.template, templateInput, output );
 		}
 	}
 

@@ -4,7 +4,7 @@
 //
 //---------------------------------
 
-const ConfigamiContext = require("./../ConfigamiContext");
+const ConfigamiContext = require("./../core/ConfigamiContext");
 const TemplateContext  = require("./TemplateContext");
 const isDirectory      = require("./../fs/isDirectory");
 
@@ -30,7 +30,7 @@ class TemplateRoot {
 	 */
 	constructor( inTemplateDir, inWorkspaceDir = null ) {
 		if( !isDirectory(inTemplateDir) ) {
-			throw "[FATAL ERROR] Setup of TemplateRoot is with an invalid directory "+inTemplateDir;
+			throw "[FATAL ERROR] Setup of TemplateRoot - invalid directory : "+inTemplateDir;
 		}
 		this.templateRootDir  = inTemplateDir;
 		this.workspaceRootDir = inWorkspaceDir;
