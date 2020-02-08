@@ -32,6 +32,13 @@ class ConfigamiContext {
 	}
 
 	/**
+	 * @return a JSON clone of the input object
+	 */
+	jsonClone(input) {
+		return JSON.parse( JSON.stringify(input) );
+	}
+
+	/**
 	 * Given the template path, and its input, apply and return its output
 	 * 
 	 * @param {String} templatePath 
