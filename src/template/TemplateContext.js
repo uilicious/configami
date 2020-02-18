@@ -218,7 +218,7 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 		// - overwrite with template.input_overwrite (if present)
 		let templateInput = jsonObjectClone( tObj.input || inputObj || {} );
 		if( tObj.input_merge ) {
-			nestedObjectAssign( templateInput, input_merge );
+			nestedObjAssign( templateInput, tObj.input_merge );
 		}
 		if( tObj.input_overwrite ) {
 			Object.assign( templateInput, tObj.input_overwrite );
