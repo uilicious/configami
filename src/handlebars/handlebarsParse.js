@@ -16,6 +16,7 @@ const helpers = require('handlebars-helpers')({
 // Custom helpers handling
 //
 handlebars.registerHelper('json2yaml', require("./helpers/json2yaml"));
+handlebars.registerHelper('forUntil', require("./helpers/forUntil"));
 handlebars.registerHelper('slashEscapeDoubleQuotes', function(ctx) {
 	return ctx.fn(this).replace(/\"/g, '\\"')
 });
