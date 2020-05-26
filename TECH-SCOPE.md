@@ -6,7 +6,7 @@ As such acceptable compromises of "performance" for better code readability is d
 
 - Syncronous Functions
 - Using handlebars without preinit compilation
-- "Unoptimized code" (such as JS object cloning using JSON)
+- "Unoptimized code" (such as JS object cloning using JSON - everywhere)
 
 # @TODO 
 

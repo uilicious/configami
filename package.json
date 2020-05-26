@@ -9,13 +9,14 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
+    "@js-util/config-object-merge": "^1.0.4",
+    "chalk": "=3.0.0",
     "fs-extra": "=8.1.0",
     "handlebars": "=4.5.3",
     "handlebars-helpers": "=0.10.0",
     "hjson": "=3.2.1",
     "json2yaml": "=1.1.0",
-    "sywac": "=1.2.2",
-    "chalk": "=3.0.0"
+    "sywac": "=1.2.2"
   },
   "devDependencies": {
     "chai": "=4.2.0",
