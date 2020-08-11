@@ -213,10 +213,18 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 		// Input object remapping
 		// This uses the following 
 		//
-		// - template.input OR parent input object
+		// - template.input_base 
+		// - merged with template.input OR parent input object
 		// - merged with template.input_merge (if present)
 		// - overwrite with template.input_overwrite (if present)
-		let templateInput = jsonObjectClone( tObj.input || inputObj || {} );
+
+		// Get the base template input
+		let templateInput = jsonObjectClone( tObj.input_base || {} );
+		
+		// Merge in with either the "input" object or the parent input
+		templateInput = nestedObjAssign( templateInput, tObj.input || inputObj || {} );
+		
+		// Perform input_merge/overwrite when needed
 		if( tObj.input_merge ) {
 			nestedObjAssign( templateInput, tObj.input_merge );
 		}
