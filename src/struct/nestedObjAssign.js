@@ -1,51 +1,60 @@
+// Dependency
+const configObjectMerge = require("@js-util/config-object-merge")
+
+// Implementation
+
 /**
  * Varient of object assign, in which nested objects are resolved recursively
  */
 function nestedObjAssign( out, src, nxtSrc ) {
-	// Recurssion detection
-	if( nxtSrc != null ) {
-		let args = Array.from(arguments);
-		out = nestedObjAssign( out, src );
-		return nestedObjAssign.apply( this, [out].concat( args.slice(2) ) );
-	}
 
-	// Skip if src is blank
-	if( src == null ) {
-		return out;
-	}
+	// The following replaces everything below
+	return configObjectMerge.all( arguments );
 
-	// Skip if src and output is identical objects 
-	// (nothing to copy over)
-	if( src === out ) {
-		return out;
-	}
+	// // Recurssion detection
+	// if( nxtSrc != null ) {
+	// 	let args = Array.from(arguments);
+	// 	out = nestedObjAssign( out, src );
+	// 	return nestedObjAssign.apply( this, [out].concat( args.slice(2) ) );
+	// }
 
-	// Iterate each property
-	for( let key in src ) {
-		// Get value
-		let val = src[key];
+	// // Skip if src is blank
+	// if( src == null ) {
+	// 	return out;
+	// }
 
-		// skip if null
-		if( val == null ) {
-			continue;
-		}
+	// // Skip if src and output is identical objects 
+	// // (nothing to copy over)
+	// if( src === out ) {
+	// 	return out;
+	// }
 
-		// if val is an object
-		if( typeof(val) == "object" ) {
-			// either copy it over 
-			if( out[key] == null ) {
-				out[key] = val
-			} else {
-				// or recursively merge it
-				nestedObjAssign( out[key], val );
-			}
-		} else {
-			// copy value direct
-			out[key] = val
-		}
-	}
+	// // Iterate each property
+	// for( let key in src ) {
+	// 	// Get value
+	// 	let val = src[key];
 
-	// Return back output
-	return out;
+	// 	// skip if null
+	// 	if( val == null ) {
+	// 		continue;
+	// 	}
+
+	// 	// if val is an object
+	// 	if( typeof(val) == "object" ) {
+	// 		// either copy it over 
+	// 		if( out[key] == null ) {
+	// 			out[key] = val
+	// 		} else {
+	// 			// or recursively merge it
+	// 			nestedObjAssign( out[key], val );
+	// 		}
+	// 	} else {
+	// 		// copy value direct
+	// 		out[key] = val
+	// 	}
+	// }
+
+	// // Return back output
+	// return out;
 }
 module.exports = nestedObjAssign;
