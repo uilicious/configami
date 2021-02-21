@@ -7,7 +7,7 @@
 - Configuration
 - Origami
 
-A Configuration and templating CLI utility, designed specifically for the use case of config management.
+A Configuration and templating CLI tool, designed specifically for the use case of config management.
 This is designed to be used in conjuncture of other tools such as bash, ansible, and terraform.
 
 The name is a shorten form of "Configuration Origami"
@@ -27,9 +27,8 @@ If you want complex user permission schema to individual config files, it is not
 
 # Workspace folder structure
 
-A `Configami` workspace consist of 3 major folders (for now)
+A `Configami` workspace would consist of the following sub folders.
 
-- PLAN
 - TEMPLATE
 - WORKSPACE
 
