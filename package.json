@@ -1,12 +1,12 @@
 {
-  "name": "configami-proj",
-  "version": "1.0.0",
+  "name": "configami",
+  "version": "1.1.0",
   "description": "Configuration File Origami",
   "main": "run.js",
   "scripts": {
     "test": "mocha \"./test/**/*.test.js\""
   },
-  "author": "",
+  "author": "Eugene",
   "license": "UNLICENSED",
   "dependencies": {
     "@js-util/config-object-merge": "^1.0.4",
