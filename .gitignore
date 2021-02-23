@@ -9,6 +9,11 @@
 node_modules
 
 #
+# Register NPM stuff
+#
+!.npmignore
+
+#
 # Register git stuff
 #
 !.git*

@@ -1,0 +1,10 @@
+# All the . hidden files stuff
+.*
+
+# Built in testing templates and test files
+template
+test
+test-files
+
+# Built in docs
+docs
