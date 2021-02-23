@@ -7,7 +7,7 @@
     "test": "mocha \"./test/**/*.test.js\""
   },
   "author": "Eugene",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "@js-util/config-object-merge": "^1.0.4",
     "chalk": "=3.0.0",
