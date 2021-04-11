@@ -21,6 +21,9 @@ handlebars.registerHelper('slashEscapeDoubleQuotes', function(ctx) {
 	return ctx.fn(this).replace(/\"/g, '\\"')
 });
 
+handlebars.registerHelper('base64encode', require("./helpers/base64encode"));
+// @TODO - base64 decoder
+
 //--------------------------------------
 //
 // Handlebar Run commands
