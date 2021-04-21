@@ -12,9 +12,7 @@ This is designed to be used in conjuncture of other tools such as bash, ansible,
 
 Allow the generation of extreamly large YAML files, from a few simple lines and a good template.
 
-```
-@TODO : Animated Example Here
-```
+![Example image of configami in action](./example-for-configami-with-arrow.png)
 
 The name is a shorten form of "Configuration Origami"
 
@@ -38,6 +36,10 @@ Its main goal is to tackle the problem of large 1000+ lines of configuration fil
 needing to be managed in a "modern" cloud setup (ie: kubernetes, terraform). With a very small team.
 
 This works by templatising the config file generation process. 
+
+# Example templates
+
+https://github.com/uilicious/configami-k8-template
 
 # Limitations
 
