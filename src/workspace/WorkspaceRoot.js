@@ -13,6 +13,7 @@ const getFolderContextInput = require("./../util/getFolderContextInput");
 const jsonObjectClone       = require("./../conv/jsonObjectClone");
 const handlebarsParse       = require("./../handlebars/handlebarsParse");
 const processOutputRemap    = require("./../util/processOutputRemap");
+const nestedObjectAssign    = require("./../struct/nestedObjAssign");
 
 //---------------------------------
 //
@@ -278,7 +279,7 @@ function applyWorkspacePlan_noRecursive( fullPath, cgCtx, inputObj, output ) {
 		// - overwrite with template.input_overwrite (if present)
 		let templateInput = jsonObjectClone( tObj.input || inputObj || {} );
 		if( tObj.input_merge ) {
-			nestedObjectAssign( templateInput, input_merge );
+			nestedObjectAssign( templateInput, tObj.input_merge );
 		}
 		if( tObj.input_overwrite ) {
 			Object.assign( templateInput, tObj.input_overwrite );
@@ -288,7 +289,7 @@ function applyWorkspacePlan_noRecursive( fullPath, cgCtx, inputObj, output ) {
 		let outputRemap = tObj.outputRemap || outputRemapFallback;
 		if( outputRemap ) {
 			// Generate the output
-			let templateOutput = cgCtx.applyTemplate( tObj.template, templateInputj, {} );
+			let templateOutput = cgCtx.applyTemplate( tObj.template, templateInput, {} );
 			processOutputRemap( output, templateOutput, outputRemap );
 		} else {
 			// Apply the template directly
