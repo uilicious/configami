@@ -16,6 +16,18 @@ Allow the generation of extreamly large YAML files, from a few simple lines and 
 
 The name is a shorten form of "Configuration Origami"
 
+---
+
+# Getting started
+
+To install configami via npm use
+
+```
+npm install -g configami
+```
+
+---
+
 # Workspace folder structure
 
 A `Configami` workspace would consist of the following sub folders.
@@ -26,7 +38,7 @@ A `Configami` workspace would consist of the following sub folders.
 This folder will also be the context where the project is executed from,
 as such `package.json` and `node_modules` in here will be used as well.
 
-In addition temporary caching folders will be generated under
+In addition temporary caching folders may be generated under
 
 - .configami_cache
 
