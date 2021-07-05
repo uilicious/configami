@@ -1,1 +1,3 @@
-module.exports = "1.0.0-alpha";
+const packageJson = require("../package.json")
+
+module.exports = packageJson.version;
