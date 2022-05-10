@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to Configami’s documentation! &#8212; Configami  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="welcome-to-configami-s-documentation">
+<h1>Welcome to Configami’s documentation!<a class="headerlink" href="#welcome-to-configami-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p><strong>Configami</strong>  (Configuration Origami)
+A configuration and templating CLI tool, designed specifically for the use case of config management.
+This is designed to be used in conjuncture of other tools such as bash, ansible, and terraform.
+Allow the generation of extreamly large YAML files, from a few simple lines and a good template.
+<a class="reference external" href="https://github.com/uilicious/configami/">Access Configami Github repository</a></p>
+<p><strong>Get Started</strong>
+Initial setup of configami can be down by creation a simple configami-setup.sh script in the root directory of your project as follow:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#</span>
+<span class="c1"># Does the initial project setup - for dependency tools</span>
+<span class="c1">#</span>
+<span class="c1"># Clone the configami proj</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">uilicious</span><span class="o">/</span><span class="n">configami</span><span class="o">.</span><span class="n">git</span> <span class="n">configami</span><span class="o">-</span><span class="n">prj</span> <span class="o">||</span> <span class="n">true</span>
+<span class="c1"># Do the node setup</span>
+<span class="n">cd</span> <span class="o">./</span><span class="n">configami</span><span class="o">-</span><span class="n">prj</span><span class="p">;</span>
+<span class="n">npm</span> <span class="n">install</span>
+<span class="n">cd</span> <span class="o">../</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Make sure you run it once to add configami to your project.</p>
+<p>Let’s then create a script to run configami, run-configami.sh</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#
+# Get the current prj directory
+#
+PRJ_DIR=&quot;$( cd &quot;$( dirname &quot;${BASH_SOURCE[0]}&quot; )&quot; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; pwd )&quot;
+# Run the configami command
+node &quot;$PRJ_DIR/configami-prj/run.js&quot;
+</pre></div>
+</div>
+<p>If everything goes smoothly you shall now be able to run the CLI by starting run-configami.sh</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This project is under active development.</p>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Configami</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Uilicious.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
