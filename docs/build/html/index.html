@@ -15,6 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Get Started" href="quickstart.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -34,38 +35,39 @@
   <section id="welcome-to-configami-s-documentation">
 <h1>Welcome to Configami’s documentation!<a class="headerlink" href="#welcome-to-configami-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
 </div>
 <p><strong>Configami</strong>  (Configuration Origami)
 A configuration and templating CLI tool, designed specifically for the use case of config management.
 This is designed to be used in conjuncture of other tools such as bash, ansible, and terraform.
 Allow the generation of extreamly large YAML files, from a few simple lines and a good template.
 <a class="reference external" href="https://github.com/uilicious/configami/">Access Configami Github repository</a></p>
-<p><strong>Get Started</strong>
-Initial setup of configami can be down by creation a simple configami-setup.sh script in the root directory of your project as follow:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-<span class="c1">#</span>
-<span class="c1"># Does the initial project setup - for dependency tools</span>
-<span class="c1">#</span>
-<span class="c1"># Clone the configami proj</span>
-<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">uilicious</span><span class="o">/</span><span class="n">configami</span><span class="o">.</span><span class="n">git</span> <span class="n">configami</span><span class="o">-</span><span class="n">prj</span> <span class="o">||</span> <span class="n">true</span>
-<span class="c1"># Do the node setup</span>
-<span class="n">cd</span> <span class="o">./</span><span class="n">configami</span><span class="o">-</span><span class="n">prj</span><span class="p">;</span>
-<span class="n">npm</span> <span class="n">install</span>
-<span class="n">cd</span> <span class="o">../</span><span class="p">;</span>
+<p>HELP:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#Usage: run &lt;project-path&gt; [options]</span>
+
+<span class="c1">#Arguments:</span>
+   <span class="c1">#&lt;project-path&gt;  Project directory path, to run configami from [required]</span>
+
+<span class="c1">#Options:</span>
+   <span class="c1">#-h, --help                                   Show help</span>
+   <span class="c1">#-v, --version                                Show version number</span>
+   <span class="c1">#    --trace                                  Extremely verbose logging (used for dev-debugging)</span>
+   <span class="c1">#-t, --template   &lt;template_path&gt;             template  sub-directory path (default to `./TEMPLATE`)</span>
+   <span class="c1">#-w, --workspace  &lt;workspace_path&gt;            workspace sub-directory path (default to `./WORKSPACE`)</span>
+   <span class="c1">#-s, --workspaceScanDir  &lt;workspace_scanDir&gt;  workspace sub-directory to scan for plans (default to ``)</span>
+
+<span class="c1">#Examples:</span>
+   <span class="c1">#Runs within the current directory (using `./TEMPLATE` and `./WORKSPACE`)</span>
+   <span class="c1">#$ run .</span>
+
+   <span class="c1">#Runs within a custom project directory (using `./TEMPLATE` and `./WORKSPACE`)</span>
+   <span class="c1">#$ run ./awesome-project/</span>
 </pre></div>
 </div>
-<p>Make sure you run it once to add configami to your project.</p>
-<p>Let’s then create a script to run configami, run-configami.sh</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
-#
-# Get the current prj directory
-#
-PRJ_DIR=&quot;$( cd &quot;$( dirname &quot;${BASH_SOURCE[0]}&quot; )&quot; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; pwd )&quot;
-# Run the configami command
-node &quot;$PRJ_DIR/configami-prj/run.js&quot;
-</pre></div>
-</div>
-<p>If everything goes smoothly you shall now be able to run the CLI by starting run-configami.sh</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This project is under active development.</p>
@@ -97,11 +99,17 @@ node &quot;$PRJ_DIR/configami-prj/run.js&quot;
 
 
 <h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="quickstart.html" title="next chapter">Get Started</a></li>
   </ul></li>
 </ul>
 </div>
