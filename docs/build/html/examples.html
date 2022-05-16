@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Examples &#8212; Configami  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Get Started" href="quickstart.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p><strong>Simple Hello World Example</strong></p>
+<p>In the /TEMPLATE directory let’s create a new /hello_template folder. Then create world.txt containing whatever content you fancy.</p>
+<p>Next step, in /WORKSPACE create a /hello_example folder, then let’s indicate to configami
+that we want to apply a template to this folder: to do this we are going to create a plan.</p>
+<p>Create a new plan.configami.json file with the following content:</p>
+<p>json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+     <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="s2">&quot;hello_template&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now execute the run script and include /hello_example from WORKSPACE as argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">run</span><span class="o">-</span><span class="n">configami</span><span class="o">.</span><span class="n">sh</span> <span class="s1">&#39;./hello_example/&#39;</span>
+</pre></div>
+</div>
+<p>You should have an exact copy of your hello folder in /hello_example</p>
+<p><strong>Simple input/output Example</strong></p>
+<p>Let’s push it further by adding variables:</p>
+<p>In the /TEMPLATE directory create /input_template
+Configami supports a lot of input format let’s test those, create the following:</p>
+<p>input.configami.json:</p>
+<p>json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">4</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>input.configami.hjson:</p>
+<p>hjson:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>input.configami.js:</p>
+<p>js:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span><span class="o">.</span><span class="n">exports</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">cg</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">input</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now that we have some inputs from differents files we need to tell configami the output format.</p>
+<p>Configami will try to replace anything between double curly brackets {{ }} if those are registered as input, whatever the output format.
+A simple one would be a .txt file (but you could test a .yaml or .js file also), create a new output.txt containing the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{{</span><span class="n">a</span><span class="p">}}{{</span><span class="n">b</span><span class="p">}}{{</span><span class="n">c</span><span class="p">}}{{</span><span class="n">d</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>Do note that we leave “d” undefined on purpose.</p>
+<p>In /WORKSPACE create /input_example and another plan.configami.json as such:</p>
+<p>json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="s2">&quot;02_input_template&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Let’s run configami and see the result of our work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">run</span><span class="o">-</span><span class="n">configami</span><span class="o">.</span><span class="n">sh</span> <span class="s1">&#39;./input_example/&#39;</span>
+</pre></div>
+</div>
+<p>You should now see a output.txt file into /input_example containing “404”.</p>
+<p><strong>Simple node server Example</strong></p>
+<p>Following what we saw previously, let’s make a basic node server.
+In /TEMPLATE create a /simple_server_template folder with the following content:</p>
+<p>simple-server.js</p>
+<p>js:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">http</span> <span class="o">=</span> <span class="n">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+
+<span class="n">var</span> <span class="n">server</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">createServer</span><span class="p">(</span><span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span> <span class="o">==</span> <span class="s1">&#39;{{path}}&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span> <span class="p">});</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">JSON</span><span class="o">.</span><span class="n">stringify</span><span class="p">({</span> <span class="n">message</span><span class="p">:</span> <span class="s2">&quot;{{message}}&quot;</span><span class="p">}));</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">end</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="n">server</span><span class="o">.</span><span class="n">listen</span><span class="p">({{</span><span class="n">port</span><span class="p">}});</span>
+
+<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Node.js web server at port {{port}} is running..&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We will keep the url path, the port and whatever data we want as configami variables then write a dedicated input file.</p>
+<p>input.configami.json:</p>
+<p>json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">5555</span><span class="p">,</span>
+    <span class="s2">&quot;path&quot;</span><span class="p">:</span><span class="s2">&quot;/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Configami sure is handy !&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally in /WORKSPACE create a /simple_server_example folder with the following plan.configami.json:</p>
+<p>json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="s2">&quot;03_simple_server_template&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">run</span><span class="o">-</span><span class="n">configami</span><span class="o">.</span><span class="n">sh</span> <span class="s1">&#39;./simple_server_example/&#39;</span>
+</pre></div>
+</div>
+<p>And see the new server with filled variables showing up.</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Configami</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Get Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="quickstart.html" title="previous chapter">Get Started</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Uilicious.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/examples.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
