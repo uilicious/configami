@@ -1,0 +1,4 @@
+{
+	// name - for the namespace
+    "namespace" : "hello-namespace",
+}

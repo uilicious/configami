@@ -2,7 +2,7 @@
 # exclude common hidden file types
 #
 .*
-
+.venv
 #
 # node_modules
 #

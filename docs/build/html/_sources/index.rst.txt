@@ -12,6 +12,7 @@ Welcome to Configami's documentation!
 
    quickstart
    examples
+   utils
 
 **Configami**  (Configuration Origami)
 A configuration and templating CLI tool, designed specifically for the use case of config management. 

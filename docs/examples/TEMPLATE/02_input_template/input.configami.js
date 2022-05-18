@@ -1,3 +1,3 @@
 module.exports = function(cg, input) {
-	input["c"] = 4;
+    input["c"] = 4;
 }

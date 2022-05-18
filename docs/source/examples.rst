@@ -134,3 +134,24 @@ Then run
    ./run-configami.sh './simple_server_example/'
 
 And see the new server with filled variables showing up.
+
+**Use multiple templates**
+
+You can add multiple templates to the same plans by putting them in a json array.
+You can also overwrite the output file name by using "outputRemap".
+
+For example:
+
+json::
+
+    [
+	    {
+		    "template" : "03_multiple_template/first_template",
+		    "outputRemap": "hello-ns.yaml"
+	    },
+
+	    {
+		    "template" : "03_multiple_template/second_template",
+		    "outputRemap": "hello-config.yaml"
+	    }
+    ]
