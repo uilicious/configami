@@ -1,0 +1,13 @@
+[
+    //  Template 1
+	{
+		"template" : "03_multiple_template/first_template",
+		"outputRemap": "hello-ns.yaml"
+	},
+
+    //  Template 2
+	{
+		"template" : "03_multiple_template/second_template",
+		"outputRemap": "hello-config.yaml"
+	}
+]

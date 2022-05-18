@@ -1,0 +1,9 @@
+{
+	// Namespace to use
+	//-------------------------------------------
+	"namespace" : "hello-namespace",
+	
+	// Deployment name to use
+	//-------------------------------------------
+	"name" : "hello-world",
+}
