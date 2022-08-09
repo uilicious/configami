@@ -31,7 +31,7 @@ function getFolderContextInput( cgCtx, folderPath, baseInput, cgCtxFunc, isWorks
 	ret = nestedObjAssign( ret, jsonObjectClone( baseInput || {} ) );
 
 	// HJSON input files to support (if valid)
-	const hjsonInputList = [ "input.configami.json", "input.configami.hjson" ]
+	const hjsonInputList = [ "input.configami.json", "input.configami.hjson", "input.configami.jsonc" ]
 
 	// Lets scan and process various handlebars json
 	for( const fileName of hjsonInputList ) {

@@ -273,7 +273,7 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 	//
 	// 3. Apply the dynamic `template.configami.[h]json` files
 	//
-	const templateFileNames = [ "template.configami.json", "template.configami.hjson" ];
+	const templateFileNames = [ "template.configami.json", "template.configami.hjson", "template.configami.jsonc" ];
 	for( const fileName of templateFileNames ) {
 		// Full template file path
 		const templateFilePath = path.join( fullPath, fileName );

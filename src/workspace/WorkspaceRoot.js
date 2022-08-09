@@ -300,7 +300,7 @@ function applyWorkspacePlan_noRecursive( fullPath, cgCtx, inputObj, output ) {
 	//
 	// 1. Apply the dynamic `plan.configami.[h]json` files (if it exists)
 	//
-	const planFileNames = [ "plan.configami.json", "plan.configami.hjson" ];
+	const planFileNames = [ "plan.configami.json", "plan.configami.hjson", "plan.configami.jsonc" ];
 	for( const fileName of planFileNames ) {
 		// Full template file path
 		const planFilePath = path.join( fullPath, fileName );
