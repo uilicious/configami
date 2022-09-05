@@ -17,6 +17,8 @@ const helpers = require('handlebars-helpers')({
 //
 handlebars.registerHelper('json2yaml', require("./helpers/json2yaml"));
 handlebars.registerHelper('forUntil', require("./helpers/forUntil"));
+handlebars.registerHelper('prettyJSON', require("./helpers/prettyJSON"));
+
 handlebars.registerHelper('slashEscapeDoubleQuotes', function(ctx) {
 	return ctx.fn(this).replace(/\"/g, '\\"')
 });
