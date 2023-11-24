@@ -44,7 +44,7 @@ function processOutputRemap( output, templateOutput, outputRemap ) {
 
 		// For the string set, do a direct remap
 		if( typeof outputSet == "string" ) {
-			joinOutput( outputRemap, templateOutput[ outputSet ] );
+			joinOutput( outputKey, templateOutput[ outputSet ] );
 			continue;
 		}
 
@@ -54,7 +54,7 @@ function processOutputRemap( output, templateOutput, outputRemap ) {
 			for( subKey of outputSet ) {
 				outputStrArr.push( templateOutput[subKey] );
 			}
-			joinOutput( outputRemap, outputStrArr.join("\n") );
+			joinOutput( outputKey, outputStrArr.join("\n") );
 			continue;
 		}
 
