@@ -1,6 +1,6 @@
 {
   "name": "configami-docs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Configami docs subproject",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,5 @@
     "url": "https://github.com/uilicious/configami/tree/master/docs"
   },
   "author": "Eugene",
-  "license": "MIT",
-  "dependencies": {
-    "uilicious-cli": "^5.0.4"
-  }
+  "license": "MIT"
 }
