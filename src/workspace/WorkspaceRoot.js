@@ -278,11 +278,11 @@ function applyWorkspacePlan_noRecursive( fullPath, cgCtx, inputObj, output ) {
 		// - merged with template.input_merge (if present)
 		// - overwrite with template.input_overwrite (if present)
 		let templateInput = jsonObjectClone( tObj.input || inputObj || {} );
-		if( tObj.input_merge ) {
-			nestedObjectAssign( templateInput, tObj.input_merge );
+		if( tObj.input_merge || tObj.inputMerge ) {
+			nestedObjectAssign( templateInput, tObj.input_merge || {}, tObj.inputMerge || {} );
 		}
-		if( tObj.input_overwrite ) {
-			Object.assign( templateInput, tObj.input_overwrite );
+		if( tObj.input_overwrite || tObj.inputOverwrite ) {
+			Object.assign( templateInput, tObj.input_overwrite || {}, tObj.inputOverwrite || {} );
 		}
 
 		// Output remapping support

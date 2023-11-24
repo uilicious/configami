@@ -271,9 +271,12 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 	}
 
 	//
-	// 3. Apply the dynamic `template.configami.[h]json` files
+	// 3. Apply the dynamic `template/plan.configami.[h]json[c]` files
 	//
-	const templateFileNames = [ "template.configami.json", "template.configami.hjson", "template.configami.jsonc" ];
+	const templateFileNames = [ 
+		"template.configami.json", "template.configami.hjson", "template.configami.jsonc",
+		"plan.configami.json", "plan.configami.hjson", "plan.configami.jsonc"
+	];
 	for( const fileName of templateFileNames ) {
 		// Full template file path
 		const templateFilePath = path.join( fullPath, fileName );
@@ -298,6 +301,21 @@ function applyTemplate_noRecursive( fullPath, cgCtx, inputObj, output ) {
 
 		// Merge the output together, note that nothing happens if they are identical (which they should be)
 		output = nestedObjAssign( output, templateFunc( cgCtx, inputObj, output ) );
+	}
+
+	//
+	// 4. Apply the dynamic `template.configami.js` module (if it exists)
+	//
+	const planFuncPath = path.resolve( fullPath, "template.configami.js" );
+	if( fsh.isFile( planFuncPath ) ) {
+		// Load the template function
+		const planFuncPath = require( planFuncPath );
+		if( planFuncPath == null ) {
+			throw "[FATAL ERROR] - Missing `module.exports = function` in template function : "+planFuncPath
+		}
+
+		// Merge the output together, note that nothing happens if they are identical (which they should be)
+		output = nestedObjAssign( output, planFuncPath( cgCtx, inputObj, output ) );
 	}
 
 	//
