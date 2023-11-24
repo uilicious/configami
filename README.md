@@ -86,6 +86,8 @@ So take the following as an example
 This helps run two seperate templates, and generate 2 seperate output files.
 Variables can be substituted via handle bars from the input files, for example `{{name}}`.
 
+Additionally keys are case insensitive.
+
 More complicated operations is possible as well with handlebars expressions and operators:
 https://handlebarsjs.com/guide/#simple-expressions
 
