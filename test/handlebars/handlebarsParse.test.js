@@ -127,5 +127,34 @@ describe("handlebarsParse", () => {
 		});
 	});
 
+	describe("getValueByValue", () => {
+		it("should retrieve value using another value as key", () => {
+			// Input object to use
+			// matches example in getValueByValue.js
+			let input = { 
+				"hello": { 
+					"world": "one", 
+					"two": "motto" 
+				}, 
+				"nested": { 
+					"key": "world", 
+					"deep": "hello.two" 
+				} 
+			};
+
+			// Test 1: Simple lookup using nested value as key
+			// nested.deep = "hello.two"
+			// lookup "hello.two" -> "motto"
+			let template1 = `{{#getValueByValue "nested.deep"}}{{/getValueByValue}}`;
+			assert.equal(handlebarsParse(template1, input), "motto");
+
+			// Test 2: Lookup in specific object
+			// nested.key = "world"
+			// lookup "world" in "hello" object -> "one"
+			let template2 = `{{#getValueByValue "hello" "nested.key"}}{{/getValueByValue}}`;
+			assert.equal(handlebarsParse(template2, input), "one");
+		});
+	});
+
 
 });

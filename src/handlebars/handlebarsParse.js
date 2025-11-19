@@ -25,6 +25,7 @@ handlebars.registerHelper('slashEscapeDoubleQuotes', function(ctx) {
 
 handlebars.registerHelper('base64encode', require("./helpers/base64encode"));
 handlebars.registerHelper('base64decode', require("./helpers/base64decode"));
+handlebars.registerHelper('getValueByValue', require("./helpers/getValueByValue"));
 
 //--------------------------------------
 //
