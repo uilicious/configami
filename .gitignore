@@ -9,6 +9,11 @@
 node_modules
 
 #
+# build output
+#
+build/
+
+#
 # Register NPM stuff
 #
 !.npmignore
