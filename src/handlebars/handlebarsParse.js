@@ -24,7 +24,7 @@ handlebars.registerHelper('slashEscapeDoubleQuotes', function(ctx) {
 });
 
 handlebars.registerHelper('base64encode', require("./helpers/base64encode"));
-// @TODO - base64 decoder
+handlebars.registerHelper('base64decode', require("./helpers/base64decode"));
 
 //--------------------------------------
 //

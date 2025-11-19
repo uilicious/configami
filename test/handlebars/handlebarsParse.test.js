@@ -92,5 +92,40 @@ describe("handlebarsParse", () => {
 		});
 	});
 
+	describe("base64encode/decode", () => {
+		it("should encode and decode base64 correctly", () => {
+			// Input object to use
+			let input = {};
+
+			// Test Encode
+			// --------------------------
+
+			// The template to use
+			let templateEncode = `{{#base64encode}}Hello World{{/base64encode}}`;
+			// The expected output (base64 of "Hello World")
+			let expectedOutputEncode = `SGVsbG8gV29ybGQ=`;
+
+			// Parse and test
+			assert.equal(
+				handlebarsParse(templateEncode, input),
+				expectedOutputEncode
+			);
+
+			// Test Decode
+			// --------------------------
+
+			// The template to use
+			let templateDecode = `{{#base64decode}}${expectedOutputEncode}{{/base64decode}}`;
+			// The expected output
+			let expectedOutputDecode = `Hello World`;
+
+			// Parse and test
+			assert.equal(
+				handlebarsParse(templateDecode, input),
+				expectedOutputDecode
+			);
+		});
+	});
+
 
 });
