@@ -1,6 +1,6 @@
 {
 	"name": "configami",
-	"version": "1.1.5",
+	"version": "1.2.0",
 	"description": "Configuration File Origami",
 	"main": "run.js",
 	"scripts": {
