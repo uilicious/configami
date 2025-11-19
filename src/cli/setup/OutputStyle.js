@@ -41,7 +41,7 @@ module.exports = function(main) {
         usagePrefix: str => {
             return chalk.white(str.slice(0, 6)) + ' ' + chalk.magenta(str.slice(7))
         },
-        usageOptionsPlaceholder: str => chalk.green.dim(str),
+        usageOptionsPlaceholder: str => chalk.dim(chalk.green(str)),
         usageCommandPlaceholder: str => chalk.magenta(str),
         usagePositionals: str => chalk.green(str),
         usageArgsPlaceholder: str => chalk.green(str),
