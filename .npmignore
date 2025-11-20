@@ -1,6 +1,9 @@
 # All the . hidden files stuff
 .*
 
+# Build dir
+build
+
 # Built in testing templates and test files
 template
 test
